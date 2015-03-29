@@ -1,9 +1,11 @@
 package com.example.swords.dutyreporting;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class LoggedInActivity extends ActionBarActivity {
@@ -35,5 +37,27 @@ public class LoggedInActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //record check in
+    public void onCheckInButtonClick(View view){
+
+    }
+
+    //record check out
+    public void onCheckOutButtonClick(View view){
+
+    }
+
+    //take to manual entry screen
+    public void onManualEntryButtonClick(View view){
+        Intent intent = new Intent(this, ManualEntryActivity.class);
+        //pass username to LoggedInActivity
+        startActivity(intent);
+    }
+
+    //take to statistics view
+    public void onStatButtonClick(View view){
+
     }
 }

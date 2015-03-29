@@ -23,6 +23,10 @@
             android:name=".LoggedInActivity"
             android:label="@string/title_activity_logged_in" >
         </activity>
+        <activity
+            android:name=".ManualEntryActivity"
+            android:label="@string/title_activity_manual_entry" >
+        </activity>
     </application>
 
 </manifest>

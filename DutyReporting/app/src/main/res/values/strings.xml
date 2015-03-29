@@ -7,6 +7,11 @@
     <string name="logo">Logo</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="title_activity_logged_in">LoggedInActivity</string>
+    <string name="title_activity_logged_in">Welcome!</string>
+    <string name="check_in">Check In</string>
+    <string name="check_out">Check Out</string>
+    <string name="statistics">Stats</string>
+    <string name="manual_entry">Manual Entry</string>
+    <string name="title_activity_manual_entry">ManualEntryActivity</string>
 
 </resources>

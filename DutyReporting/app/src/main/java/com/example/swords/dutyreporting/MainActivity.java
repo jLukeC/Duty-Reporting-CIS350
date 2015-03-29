@@ -51,6 +51,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void log_in () {
         Intent intent = new Intent(this, LoggedInActivity.class);
+        //pass username to LoggedInActivity
+        intent.putExtra("USERNAME", et_username.getText().toString());
         startActivity(intent);
     }
 
