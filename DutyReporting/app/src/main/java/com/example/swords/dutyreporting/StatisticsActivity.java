@@ -5,24 +5,26 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 
 
-public class LoggedInActivity extends ActionBarActivity {
-    private String username;
+public class StatisticsActivity extends ActionBarActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logged_in);
+        setContentView(R.layout.activity_statistics);
         Intent intent = getIntent();
-        username = intent.getStringExtra("USERNAME");
+        String username = intent.getStringExtra("USERNAME");
+        TextView tv = (TextView)findViewById(R.id.user_welcome);
+        tv.setText("HI " + username);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_logged_in, menu);
+        getMenuInflater().inflate(R.menu.menu_statistics, menu);
         return true;
     }
 
@@ -39,30 +41,5 @@ public class LoggedInActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    //record check in
-    public void onCheckInButtonClick(View view){
-
-    }
-
-    //record check out
-    public void onCheckOutButtonClick(View view){
-
-    }
-
-    //take to manual entry screen
-    public void onManualEntryButtonClick(View view){
-        Intent intent = new Intent(this, ManualEntryActivity.class);
-        //pass username to LoggedInActivity
-        startActivity(intent);
-    }
-
-    //take to statistics view
-    public void onStatButtonClick(View view){
-        Intent intent = new Intent(this, StatisticsActivity.class);
-        //pass username to StatisticsActivity
-        intent.putExtra("USERNAME",username);
-        startActivity(intent);
     }
 }

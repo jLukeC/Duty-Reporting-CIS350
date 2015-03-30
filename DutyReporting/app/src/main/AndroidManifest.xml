@@ -27,6 +27,10 @@
             android:name=".ManualEntryActivity"
             android:label="@string/title_activity_manual_entry" >
         </activity>
+        <activity
+            android:name=".StatisticsActivity"
+            android:label="@string/title_activity_statistics" >
+        </activity>
     </application>
 
 </manifest>

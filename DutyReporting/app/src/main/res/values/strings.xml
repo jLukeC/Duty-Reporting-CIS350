@@ -13,5 +13,6 @@
     <string name="statistics">Stats</string>
     <string name="manual_entry">Manual Entry</string>
     <string name="title_activity_manual_entry">ManualEntryActivity</string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
 
 </resources>
