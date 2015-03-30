@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.Set;
+
 
 public class StatisticsActivity extends ActionBarActivity {
 
@@ -15,9 +17,24 @@ public class StatisticsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         Intent intent = getIntent();
+
         String username = intent.getStringExtra("USERNAME");
-        TextView tv = (TextView)findViewById(R.id.user_welcome);
-        tv.setText("HI " + username);
+        TextView header = (TextView)findViewById(R.id.user_welcome);
+        header.setText("Statistics for " + username);
+
+        ParseHandler handler = new ParseHandler(username);
+        Set<String> hrsWorked = handler.getHoursWorkedPerWeek();
+        Set<String> warnings = handler.getWarnings();
+
+        TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
+        for (String s : hrsWorked) {
+            hrsTextView.append(s + '\n');
+        }
+
+        TextView warningTextView = (TextView)findViewById(R.id.warnings);
+        for (String s : warnings) {
+            warningTextView.append(s + '\n');
+        }
     }
 
 

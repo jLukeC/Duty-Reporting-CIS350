@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
         //test whether device is connected to Parse
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", "bar");
+        testObject.put("objectId", "12345");
         testObject.saveInBackground();
 
         //initialize button and text fields
