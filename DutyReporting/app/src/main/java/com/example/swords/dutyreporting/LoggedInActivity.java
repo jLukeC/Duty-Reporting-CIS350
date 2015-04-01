@@ -1,21 +1,35 @@
 package com.example.swords.dutyreporting;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationServices;
 
 
-public class LoggedInActivity extends ActionBarActivity {
+import com.google.android.gms.common.api.GoogleApiClient;
+
+
+public class LoggedInActivity extends ActionBarActivity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private String username;
+    private GoogleApiClient mGoogleApiClient;
+    private boolean succesfulConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged_in);
         Intent intent = getIntent();
         username = intent.getStringExtra("USERNAME");
+        succesfulConnection = false;
+        buildGoogleApiClient();
     }
 
 
@@ -44,6 +58,34 @@ public class LoggedInActivity extends ActionBarActivity {
     //record check in
     public void onCheckInButtonClick(View view){
 
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        CharSequence text = null;
+
+        if (!succesfulConnection) {
+            text = "Unable to verify location.";
+        } else {
+            Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+
+            float testLat = (float) 39.950017;
+            float testLong = (float) -75.196867;
+
+            float[] results = new float[1];
+            Location.distanceBetween(testLat, testLong,
+                    39.95013175, -75.1937449, results);
+
+            System.out.println("Distance = " + results[0]);
+
+
+            if (results[0] < 1000) {
+                text = " Your location has been verified, thank you for checking in!";
+            } else {
+                text = "Your location does not appear to be near the hospital...";
+            }
+        }
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     //record check out
@@ -65,4 +107,39 @@ public class LoggedInActivity extends ActionBarActivity {
         intent.putExtra("USERNAME",username);
         startActivity(intent);
     }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        succesfulConnection = true;
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        succesfulConnection = false;
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
 }
