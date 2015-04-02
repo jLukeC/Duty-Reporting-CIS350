@@ -64,7 +64,7 @@ public class ManualEntryActivity extends ActionBarActivity {
 
     public void onSaveButtonClicked(View view){
         String datetext = month_selected + "-" + day_selected + "-" + year_selected;
-        Toast.makeText(getApplicationContext(),"Your hours for "+datetext+" have been saved!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Your hours for "+datetext+" have been saved!", Toast.LENGTH_SHORT).show();
         ParseHandler parseHandler = new ParseHandler(username);
         parseHandler.setHoursWorked(day_selected,month_selected,year_selected,hours_worked);
     }
