@@ -90,13 +90,40 @@ public class LoggedInActivity extends ActionBarActivity
 
     //record check out
     public void onCheckOutButtonClick(View view){
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        CharSequence text = null;
 
+        if (!succesfulConnection) {
+            text = "Unable to verify location.";
+        } else {
+            Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+
+            float testLat = (float) 39.950017;
+            float testLong = (float) -75.196867;
+
+            float[] results = new float[1];
+            Location.distanceBetween(testLat, testLong,
+                    39.95013175, -75.1937449, results);
+
+            System.out.println("Distance = " + results[0]);
+
+
+            if (results[0] < 1000) {
+                text = " Your location has been verified, thank you for checking out!";
+            } else {
+                text = "Your location does not appear to be near the hospital...";
+            }
+        }
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     //take to manual entry screen
     public void onManualEntryButtonClick(View view){
         Intent intent = new Intent(this, ManualEntryActivity.class);
-        //pass username to LoggedInActivity
+        intent.putExtra("USERMAME",username);
         startActivity(intent);
     }
 

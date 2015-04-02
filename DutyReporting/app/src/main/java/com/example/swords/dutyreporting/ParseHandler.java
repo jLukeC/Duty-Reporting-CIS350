@@ -30,4 +30,9 @@ public class ParseHandler {
         testData.add("Not enough days off - Week 3");
         return testData;
     }
+
+    public void setHoursWorked(int day, int month, int year, int hours) {
+        //add hours to parse database for given date
+
+    }
 }

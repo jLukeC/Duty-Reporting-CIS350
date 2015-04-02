@@ -1,55 +1,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.swords.dutyreporting.ManualEntryActivity">
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Day:"
-        android:id="@+id/DayText"
-        />
-
-    <Spinner
+    <TextView
+        android:id="@+id/choose_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/DaySpinner"
-        android:layout_above="@+id/MonthSpinner"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_height="20pt"
+        android:text="@string/pick_date"
+        android:textSize="18pt"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/num_hours"
+        android:layout_toStartOf="@+id/num_hours" />
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Month:"
-        android:id="@+id/MonthText"
-     />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/MonthSpinner"
-        android:layout_above="@+id/YearSpinner"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Year:"
-        android:id="@+id/YearText"
-        />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/YearSpinner"
-        android:layout_alignParentBottom="true"
+    <TextView
+        android:id="@+id/pick_hours"
+        android:layout_width="120pt"
+        android:layout_height="30pt"
+        android:layout_above="@+id/hourBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="174dp" />
+        android:text="@string/pick_hour"
+        android:textSize="18pt" />
+
+    <TextView
+        android:id="@+id/num_hours"
+        android:layout_width="50pt"
+        android:layout_height="30pt"
+        android:textSize="18pt"
+        android:layout_alignTop="@+id/pick_hours"
+        android:layout_toRightOf="@+id/pick_hours"
+        android:layout_toEndOf="@+id/pick_hours" />
+
+    <SeekBar
+        android:id="@+id/hourBar"
+        android:layout_width="361dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/save_entry"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="37dp"
+        android:layout_weight=".5"
+        android:clickable="true"
+        android:color="#FF0000"
+        android:max="24" />
+
+    <Button
+        android:id="@+id/save_entry"
+        android:layout_width="80pt"
+        android:layout_height="30pt"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.24"
+        android:background="#FF0000"
+        android:onClick="onSaveButtonClicked"
+        android:text="@string/save"
+        android:textColor="#FFFFFF"
+        android:textSize="12pt"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/num_hours"
+        android:layout_toStartOf="@+id/num_hours" />
+
+    <CalendarView
+        android:id="@+id/manual_cal"
+        android:layout_width="match_parent"
+        android:layout_height="100pt"
+        android:showWeekNumber="false"
+        android:layout_below="@+id/choose_date"
+        android:layout_alignLeft="@+id/choose_date"
+        android:layout_alignStart="@+id/choose_date"
+        android:layout_above="@+id/pick_hours"
+        android:selectedWeekBackgroundColor="#FFFFFF"
+        android:focusedMonthDateColor="#FF0000"/>
+
 
 </RelativeLayout>
