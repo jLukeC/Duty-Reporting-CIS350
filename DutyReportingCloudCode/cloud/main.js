@@ -18,7 +18,10 @@ Parse.Cloud.define('dutyViolations', function(request, response) {
   		var totalHours = 0;
 
   		for (var i = 0; i < results.length; i++) {
-  			totalHours += (results[i].shiftLength/oneHour);
+  			if (typeof results[i] === 'undefined') {
+  				break;
+  			}
+  			totalHours += (results[i].endTime.getTime() - results[i].startTime.getTime())/oneHour;
   		}
   		if (totalHours/4 > 80) {
   			response.monthHourViolation = 2;
@@ -32,12 +35,12 @@ Parse.Cloud.define('dutyViolations', function(request, response) {
 		var currentDate = new Date();
 		var tempDate = new Date(Date.now() - (7 * oneDay));
 
-		if (sameDate(tempDate, new Date(results[6].startTime))) {
+		if (typeof results[6] !== 'undefined' && sameDate(tempDate, results[6].startTime)) {
 			response.weekHourViolation = 2;
 		} else {
 			tempDate = new Date(tempDate.getTime() + oneDay);
 
-			if (sameDate(tempDate, new Date(results[5].startTime))) {
+			if (typeof results[5] !== 'undefined' && sameDate(tempDate, results[5].startTime)) {
 				response.weekHourViolation = 1;
 			} else {
 				response.weekHourViolation = 0;
@@ -45,22 +48,23 @@ Parse.Cloud.define('dutyViolations', function(request, response) {
 		}
 
 		//Check for at least eight hours off
-		var endOfLastShift = results[0].startTime + results[0].shiftLength;
-		var hoursElapsed = (currentDate.getTime() - endOfLastShift)/oneHour;
+		var hoursElapsed = (currentDate.getTime() - results[0].endTime.getTime())/oneHour;
 
-		if (hoursElapsed < 8) {
+		if (typeof results[0] === 'undefined') {
+			response.restPeriodViolation = 0;
+		} else if (hoursElapsed < 8) {
 			response.restPeriodViolation = 2;
 		} else if (hoursElapsed < 10) {
 			response.restPeriodViolation = 1;
 		} else {
 			response.restPeriodViolation = 0;
 		}
+		response.success();
   	},
   	error: function(error) {
-
+  		response.error();
   	}
   });
-  response.success("Hello world!");
 });
 
 var sameDate = function (date1, date2) {

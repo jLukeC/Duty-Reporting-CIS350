@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
+import android.util.Log;
 
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,6 +22,7 @@ public class LoggedInActivity extends ActionBarActivity
     private String username;
     private GoogleApiClient mGoogleApiClient;
     private boolean succesfulConnection;
+    private static final String TAG = "LoggedInActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class LoggedInActivity extends ActionBarActivity
             Location.distanceBetween(testLat, testLong,
                     39.95013175, -75.1937449, results);
 
-            System.out.println("Distance = " + results[0]);
+            Log.v(TAG, "Distance = " + results[0]);
 
 
             if (results[0] < 1000) {
@@ -107,7 +109,7 @@ public class LoggedInActivity extends ActionBarActivity
             Location.distanceBetween(testLat, testLong,
                     39.95013175, -75.1937449, results);
 
-            System.out.println("Distance = " + results[0]);
+            Log.v(TAG, "Distance = " + results[0]);
 
 
             if (results[0] < 1000) {
