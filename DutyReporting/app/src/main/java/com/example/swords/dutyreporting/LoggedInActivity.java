@@ -115,7 +115,7 @@ public class LoggedInActivity extends ActionBarActivity
             if (results[0] < 1000) {
                 text = " Your location has been verified, thank you for checking out!";
             } else {
-                text = "You should be checking out as you leave the hospital.";
+                text = "Your location does not appear to be near the hospital...";
             }
         }
         Toast toast = Toast.makeText(context, text, duration);
@@ -125,7 +125,7 @@ public class LoggedInActivity extends ActionBarActivity
     //take to manual entry screen
     public void onManualEntryButtonClick(View view){
         Intent intent = new Intent(this, ManualEntryActivity.class);
-        //pass username to LoggedInActivity
+        intent.putExtra("USERMAME",username);
         startActivity(intent);
     }
 
