@@ -2,11 +2,14 @@ package com.example.swords.dutyreporting;
 
 import android.util.Log;
 
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -57,9 +60,22 @@ public class ParseHandler {
         return testData;
     }
 
-    public void setHoursWorked(int day, int month, int year, int hours) {
+    public boolean setHoursWorked(Calendar start, Calendar end) {
         //add hours to parse database for given date
-
+        Date start_date = start.getTime();
+        Date end_date = end.getTime();
+        try {
+            ParseObject new_time = new ParseObject("HourEntry");
+            new_time.put("startTime", start_date);
+            new_time.put("endTime", end_date);
+            new_time.put("username", "testuser");
+            new_time.saveInBackground();
+            return  true;
+        }
+        catch(Exception e){
+            Log.d("adding hours","could not add hour entry");
+            return false;
+        }
     }
 
     /**
