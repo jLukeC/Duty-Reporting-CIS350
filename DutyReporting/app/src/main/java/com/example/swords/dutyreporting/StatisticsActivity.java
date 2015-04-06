@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 
@@ -23,7 +24,7 @@ public class StatisticsActivity extends ActionBarActivity {
         header.setText("Statistics for " + username);
 
         ParseHandler handler = new ParseHandler(username);
-        Set<String> hrsWorked = handler.getHoursWorkedPerWeek();
+        ArrayList<String> hrsWorked = handler.getHoursWorkedPerWeek();
         Set<String> warnings = handler.getWarnings();
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);

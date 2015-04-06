@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
     tools:context="com.example.swords.dutyreporting.ManualEntryActivity">
 
     <TextView
@@ -13,43 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="20pt"
         android:text="@string/pick_date"
-        android:textSize="18pt"
+        android:textSize="16pt"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/num_hours"
-        android:layout_toStartOf="@+id/num_hours" />
-
-
-    <TextView
-        android:id="@+id/pick_hours"
-        android:layout_width="120pt"
-        android:layout_height="30pt"
-        android:layout_above="@+id/hourBar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/pick_hour"
-        android:textSize="18pt" />
-
-    <TextView
-        android:id="@+id/num_hours"
-        android:layout_width="50pt"
-        android:layout_height="30pt"
-        android:textSize="18pt"
-        android:layout_alignTop="@+id/pick_hours"
-        android:layout_toRightOf="@+id/pick_hours"
-        android:layout_toEndOf="@+id/pick_hours" />
-
-    <SeekBar
-        android:id="@+id/hourBar"
-        android:layout_width="361dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/save_entry"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="37dp"
-        android:layout_weight=".5"
-        android:clickable="true"
-        android:color="#FF0000"
-        android:max="24" />
+         />
 
     <Button
         android:id="@+id/save_entry"
@@ -61,10 +28,47 @@
         android:onClick="onSaveButtonClicked"
         android:text="@string/save"
         android:textColor="#FFFFFF"
-        android:textSize="12pt"
+        android:textSize="18pt"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/num_hours"
-        android:layout_toStartOf="@+id/num_hours" />
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/pick_start_time"
+        android:layout_width="60pt"
+        android:layout_height="20pt"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.24"
+        android:background="#C0C0C0"
+        android:text="@string/start_time"
+        android:textColor="#FF0000"
+        android:textSize="10pt"
+        android:onClick="showStartTimeDiaglog"
+        android:layout_below="@+id/manual_cal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:backgroundTint="@color/abc_background_cache_hint_selector_material_light" />
+
+    <Button
+        android:id="@+id/pick_end_time"
+        android:layout_width="60pt"
+        android:layout_height="20pt"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.24"
+        android:background="#C0C0C0"
+        android:text="@string/end_time"
+        android:textColor="#FF0000"
+        android:textSize="10pt"
+        android:onClick="showEndTimeDiaglog"
+        android:layout_below="@+id/pick_start_time"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:backgroundTint="@color/abc_background_cache_hint_selector_material_light" />
 
     <CalendarView
         android:id="@+id/manual_cal"
@@ -74,9 +78,30 @@
         android:layout_below="@+id/choose_date"
         android:layout_alignLeft="@+id/choose_date"
         android:layout_alignStart="@+id/choose_date"
-        android:layout_above="@+id/pick_hours"
         android:selectedWeekBackgroundColor="#FFFFFF"
         android:focusedMonthDateColor="#FF0000"/>
+
+    <TextView
+        android:layout_width="80pt"
+        android:layout_height="20pt"
+        android:id="@+id/start_date_text"
+        android:layout_alignTop="@+id/pick_start_time"
+        android:layout_alignLeft="@+id/end_date_text"
+        android:layout_alignStart="@+id/end_date_text"
+        android:gravity="center"
+        android:textColor= "#FF0000"
+        android:textSize="9pt" />
+
+    <TextView
+        android:layout_width="80pt"
+        android:layout_height="20pt"
+        android:id="@+id/end_date_text"
+        android:layout_alignTop="@+id/pick_end_time"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:textColor= "#FF0000"
+        android:textSize="9pt" />
 
 
 </RelativeLayout>
