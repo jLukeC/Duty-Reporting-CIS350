@@ -18,4 +18,5 @@
     <string name="end_time">End Time</string>
     <string name="pick_date">Choose a start date:</string>
     <string name="save">SAVE</string>
+    <string name="title_activity_pdloggin_in">PDLogginInActivity</string>
 </resources>
