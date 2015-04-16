@@ -29,7 +29,7 @@ public class StatisticsActivity extends ActionBarActivity {
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
         for (String s : hrsWorked) {
-            hrsTextView.append(s + '\n');
+            hrsTextView.append(s +  "hrs" + '\n');
         }
 
         TextView warningTextView = (TextView)findViewById(R.id.warnings);

@@ -1,6 +1,7 @@
 package com.example.swords.dutyreporting;
 
 import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
+import java.security.MessageDigest;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,11 +27,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //initialize Parse
         Parse.initialize(this, "2DR7xvqsx4YcYsgiZ7HGfy5XBLF1fWudmD21ykku", "75gq1Es8M4imxD1SQHVWG1e1CqvNSlTYtNxRbk0T");
-
-        Log.v()
 
         //test whether device is connected to Parse
         ParseObject testObject = new ParseObject("TestObject");
@@ -49,12 +49,22 @@ public class MainActivity extends ActionBarActivity {
                 if (et_username.getText().toString().equals("user") && et_password.getText().toString().equals("pass")) {
                     log_in();
                 }
+                else if (et_username.getText().toString().equals("pduser") && et_password.getText().toString().equals("pass")) {
+                    pd_log_in();
+                }
             }
         });
     }
 
     public void log_in () {
         Intent intent = new Intent(this, LoggedInActivity.class);
+        //pass username to LoggedInActivity
+        intent.putExtra("USERNAME", et_username.getText().toString());
+        startActivity(intent);
+    }
+
+    public void pd_log_in () {
+        Intent intent = new Intent(this, PDLogginInActivity.class);
         //pass username to LoggedInActivity
         intent.putExtra("USERNAME", et_username.getText().toString());
         startActivity(intent);
@@ -82,5 +92,6 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

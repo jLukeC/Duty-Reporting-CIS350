@@ -19,4 +19,7 @@
     <string name="pick_date">Choose a start date:</string>
     <string name="save">SAVE</string>
     <string name="title_activity_pdloggin_in">PDLogginInActivity</string>
+    <string name="title_activity_aggregate_data">AggregateDataActivity</string>
+    <string name="title_activity_list_of_residents">ListOfResidentsActivity</string>
+    <string name="title_activity_specific_user_data">SpecificUserDataActivity</string>
 </resources>
