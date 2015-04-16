@@ -1,21 +1,25 @@
 package com.example.swords.dutyreporting;
 
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +29,9 @@ public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private String username;
     private GoogleApiClient mGoogleApiClient;
-    private boolean succesfulConnection;
-    private ArrayList<Geofence> mGeofenceList = new ArrayList<Geofence>();
-    private PendingIntent mGeofencePendingIntent;
+    private ArrayList<Geofence> mGeofenceList;
+    private boolean connectedToGoogleApi;
+    private PendingIntent mGeofenceRequestIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,27 @@ public class LoggedInActivity extends ActionBarActivity
         setContentView(R.layout.activity_logged_in);
         Intent intent = getIntent();
         username = intent.getStringExtra("USERNAME");
-        succesfulConnection = false;
-        buildGoogleApiClient();
+        connectedToGoogleApi = false;
 
-        setupGeofences();
+        //Checks to make sure that app can connect to google services
+        if (isGooglePlayServicesAvailable()) {
+
+            //Builds and connects
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            mGoogleApiClient.connect();
+
+            mGeofenceList = new ArrayList<Geofence>();
+            setupGeofences();
+        }
     }
 
+    /**
+     * This function creates and adds geofences to the list from the constants files
+     */
     protected void setupGeofences() {
         Resources res = getResources();
         String[] resLocations = res.getStringArray(R.array.location_array);
@@ -68,7 +87,6 @@ public class LoggedInActivity extends ActionBarActivity
                             Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
         }
-
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -79,13 +97,13 @@ public class LoggedInActivity extends ActionBarActivity
     }
 
     private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
+//        // Reuse the PendingIntent if we already have it.
+//        if (mGeofencePendingIntent != null) {
+//            return mGeofencePendingIntent;
+//        }
 //        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
+//        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+//        // calling addGeofences() and removeGeofences().
 //        return PendingIntent.getService(this, 0, intent, PendingIntent.
 //                FLAG_UPDATE_CURRENT);
         return null;
@@ -121,7 +139,7 @@ public class LoggedInActivity extends ActionBarActivity
         int duration = Toast.LENGTH_SHORT;
         CharSequence text = null;
 
-        if (!succesfulConnection) {
+        if (!connectedToGoogleApi) {
             text = "Unable to verify location.";
         } else {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -153,7 +171,7 @@ public class LoggedInActivity extends ActionBarActivity
         int duration = Toast.LENGTH_SHORT;
         CharSequence text = null;
 
-        if (!succesfulConnection) {
+        if (!connectedToGoogleApi) {
             text = "Unable to verify location.";
         } else {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -194,38 +212,79 @@ public class LoggedInActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
 
+    /**
+     * This callback is executed when the app has connected to googleplayServices
+     * @param connectionHint
+     */
     @Override
     public void onConnected(Bundle connectionHint) {
-        succesfulConnection = true;
+        connectedToGoogleApi = true;
+        // Get the PendingIntent for the geofence monitoring request.
+        // Send a request to add the current geofences.
+        mGeofenceRequestIntent = getGeofenceTransitionPendingIntent();
+        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList,
+                mGeofenceRequestIntent);
+        Toast.makeText(this, "Starting geofence transition service", Toast.LENGTH_SHORT).show();
     }
 
+    private PendingIntent getGeofenceTransitionPendingIntent() {
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    /**
+     * Callback when google services connection suspends
+     * @param cause
+     */
     @Override
     public void onConnectionSuspended(int cause) {
-        succesfulConnection = false;
+        connectedToGoogleApi = false;
     }
 
+
+    /**
+     * Callback when google services connection fails
+     * @param result
+     */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+
+    /**
+     * Checks that a connection can be made to google services
+     * @return
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == resultCode) {
+            if (Log.isLoggable("DutyReporting", Log.DEBUG)) {
+                Log.d("DutyReporting", "Google Play services is available.");
+            }
+            return true;
+        } else {
+            Log.e("DutyReporting" , "Google Play services is unavailable.");
+            return false;
+        }
     }
 
+
+    /**
+     * Called when activity is ending, disconnects from google play services
+     */
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         mGoogleApiClient.disconnect();
     }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getApplicationContext(), "received", Toast.LENGTH_SHORT);
+        }
+    };
+
 
 }
