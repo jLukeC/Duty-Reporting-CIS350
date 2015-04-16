@@ -3,6 +3,7 @@ package com.example.swords.dutyreporting;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ public class MainActivity extends ActionBarActivity {
 
         //initialize Parse
         Parse.initialize(this, "2DR7xvqsx4YcYsgiZ7HGfy5XBLF1fWudmD21ykku", "75gq1Es8M4imxD1SQHVWG1e1CqvNSlTYtNxRbk0T");
+
+        Log.v()
 
         //test whether device is connected to Parse
         ParseObject testObject = new ParseObject("TestObject");
