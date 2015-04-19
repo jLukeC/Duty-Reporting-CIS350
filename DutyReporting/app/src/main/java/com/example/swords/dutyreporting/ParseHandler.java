@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,12 +22,30 @@ import java.util.concurrent.TimeUnit;
  * Created by lukecarlson on 3/30/15.
  */
 public class ParseHandler {
-    private String user;
+    private String username;
     public ParseHandler(String u) {
         // get parse information for that username
-        user = u;
+        username = u;
     }
 
+    /* returns a list of all residents */
+    public static Set<String> getResidents() {
+        Set<String> residents = new HashSet<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
+        query.whereEqualTo("isSupervisor",false);
+        try {
+            List<ParseObject> pObjs = query.find();
+            for (ParseObject p : pObjs) {
+               residents.add(p.getString("name"));
+            }
+        }
+        catch (ParseException e) {
+            Log.d("score","failed, parse Error");
+        }
+        return residents;
+    }
+
+    /*Returns hours worked per week, sorted by date*/
     public ArrayList<String> getHoursWorkedPerWeek() {
         // get parse data on hours per day and convert it to week
         ArrayList<String> hrsData = new ArrayList<String>();
@@ -56,7 +75,7 @@ public class ParseHandler {
         // get list of warnings from parse
         Set<String> warnings = new TreeSet<String>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
-        query.whereEqualTo("username", "testuser");
+        query.whereEqualTo("username", username);
         try {
             List<ParseObject> pObjs = query.find();
             // hours between shifts

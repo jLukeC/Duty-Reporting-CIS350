@@ -13,17 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-<<<<<<< HEAD
-import android.util.Log;
-=======
-import com.google.android.gms.common.api.GoogleApiClient;
->>>>>>> a7ea85014792d9a2fcdda18e4f5654163111c927
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +29,11 @@ public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private String username;
     private GoogleApiClient mGoogleApiClient;
-<<<<<<< HEAD
     private boolean succesfulConnection;
     private static final String TAG = "LoggedInActivity";
-=======
     private ArrayList<Geofence> mGeofenceList;
     private boolean connectedToGoogleApi;
     private PendingIntent mGeofenceRequestIntent;
->>>>>>> a7ea85014792d9a2fcdda18e4f5654163111c927
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

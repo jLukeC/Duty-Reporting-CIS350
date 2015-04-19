@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -42,7 +41,6 @@
             android:name=".PDLogginInActivity"
             android:label="@string/title_activity_pdloggin_in" >
         </activity>
-<<<<<<< HEAD
         <activity
             android:name=".AggregateDataActivity"
             android:label="@string/title_activity_aggregate_data" >
@@ -55,9 +53,13 @@
             android:name=".SpecificUserDataActivity"
             android:label="@string/title_activity_specific_user_data" >
         </activity>
-=======
-        <service android:name=".GeofenceTransitionsIntentService"/>
->>>>>>> a7ea85014792d9a2fcdda18e4f5654163111c927
+
+        <service android:name=".GeofenceTransitionsIntentService" />
+
+        <activity
+            android:name=".AllViolationsActivity"
+            android:label="@string/title_activity_all_violations" >
+        </activity>
     </application>
 
 </manifest>

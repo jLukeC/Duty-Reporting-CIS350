@@ -34,6 +34,7 @@
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:onClick="onViolationClicked"
         android:text="Violations"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
