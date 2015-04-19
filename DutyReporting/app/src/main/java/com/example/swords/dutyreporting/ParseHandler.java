@@ -42,7 +42,7 @@ public class ParseHandler {
                 double hrs = getDateDiff(start,end, TimeUnit.HOURS);
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                 String reportDate = df.format(start);
-                hrsData.add(reportDate + " " + Double.toString(hrs) + "hrs");
+                hrsData.add(reportDate + " " + Double.toString(hrs));
             }
         }
         catch (ParseException e) {
@@ -137,6 +137,7 @@ public class ParseHandler {
             return false;
         }
     }
+
 
     /**
      * Get a diff between two dates

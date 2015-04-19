@@ -18,4 +18,12 @@
     <string name="end_time">End Time</string>
     <string name="pick_date">Choose a start date:</string>
     <string name="save">SAVE</string>
+    <string name="title_activity_pdloggin_in">PDLogginInActivity</string>
+<<<<<<< HEAD
+    <string name="title_activity_aggregate_data">AggregateDataActivity</string>
+    <string name="title_activity_list_of_residents">ListOfResidentsActivity</string>
+    <string name="title_activity_specific_user_data">SpecificUserDataActivity</string>
+=======
+    <string name="radius">500</string>
+>>>>>>> a7ea85014792d9a2fcdda18e4f5654163111c927
 </resources>
