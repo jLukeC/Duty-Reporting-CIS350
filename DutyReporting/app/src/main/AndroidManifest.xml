@@ -53,13 +53,13 @@
             android:name=".SpecificUserDataActivity"
             android:label="@string/title_activity_specific_user_data" >
         </activity>
-
         <service android:name=".GeofenceTransitionsIntentService" />
 
         <activity
             android:name=".AllViolationsActivity"
             android:label="@string/title_activity_all_violations" >
         </activity>
+        <service android:name=".GeofenceTransitionsIntentService"/>
     </application>
 
 </manifest>
