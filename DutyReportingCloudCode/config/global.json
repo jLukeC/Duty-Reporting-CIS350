@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.0"
+  },
+  "applications": {
+    "DutyReporter": {
+      "applicationId": "2DR7xvqsx4YcYsgiZ7HGfy5XBLF1fWudmD21ykku",
+      "masterKey": "L9Oomo1FDCPr2o4waOBj6shJuiVk5YRh4rZOzxY3"
+    },
+    "_default": {
+      "link": "DutyReporter"
+    }
+  }
+}
