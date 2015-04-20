@@ -1,70 +1,59 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.swords.dutyreporting;
 
+
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-import com.google.android.gms.wearable.Wearable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Listens for geofence transition changes.
+ * Listener for geofence transition changes.
+ *
+ * Receives geofence transition events from Location Services in the form of an Intent containing
+ * the transition type and geofence id(s) that triggered the transition. Creates a notification
+ * as the output.
  */
-public class GeofenceTransitionsIntentService extends IntentService
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class GeofenceTransitionsIntentService extends IntentService {
 
-    private GoogleApiClient mGoogleApiClient;
+    protected static final String TAG = "geofence-service";
 
+    /**
+     * This constructor is required, and calls the super IntentService(String)
+     * constructor with the name for a worker thread.
+     */
     public GeofenceTransitionsIntentService() {
-        super(GeofenceTransitionsIntentService.class.getSimpleName());
+        // Use the TAG to name the worker thread.
+        super(TAG);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
     }
 
     /**
      * Handles incoming intents.
-     * @param intent The Intent sent by Location Services. This Intent is provided to Location
-     * Services (inside a PendingIntent) when addGeofences() is called.
+     * @param intent sent by Location Services. This Intent is provided to Location
+     *               Services (inside a PendingIntent) when addGeofences() is called.
      */
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-//            String errorMessage = GeofenceErrorMessages.getErrorString(this,
-//                    geofencingEvent.getErrorCode());
-            Log.e("DutyReporting", "Geofencing error message");
+            Log.e(TAG, "Error in handling intent");
             return;
         }
 
@@ -75,40 +64,95 @@ public class GeofenceTransitionsIntentService extends IntentService
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
+            // Get the geofences that were triggered. A single event can trigger multiple geofences.
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+
+            // Get the transition details as a String.
+            String geofenceTransitionDetails = getGeofenceTransitionDetails(
+                    this,
+                    geofenceTransition,
+                    triggeringGeofences
+            );
 
             // Send notification and log the transition details.
-            Intent i = new Intent("transition");
-            sendBroadcast(i);
-            Log.i("DutyReporting", Integer.toString(geofenceTransition));
+            sendNotification(geofenceTransitionDetails);
+            Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
-            Log.e("DutyReporting", "invalid geofence transition type");
+            Log.e(TAG,"Invalid transition type");
         }
     }
 
     /**
-     * Showing a toast message, using the Main thread
+     * Gets transition details and returns them as a formatted string.
+     *
+     * @param context               The app context.
+     * @param geofenceTransition    The ID of the geofence transition.
+     * @param triggeringGeofences   The geofence(s) triggered.
+     * @return                      The transition details formatted as String.
      */
-    private void showToast(final Context context, final int resourceId) {
-        Handler mainThread = new Handler(Looper.getMainLooper());
-        mainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, context.getString(resourceId), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private String getGeofenceTransitionDetails(
+            Context context,
+            int geofenceTransition,
+            List<Geofence> triggeringGeofences) {
+
+//        String geofenceTransitionString = getTransitionString(geofenceTransition);
+
+        String geofenceTransitionString = "Transition string goes here";
+
+        // Get the Ids of each geofence that was triggered.
+        ArrayList triggeringGeofencesIdsList = new ArrayList();
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesIdsList.add(geofence.getRequestId());
+        }
+        String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
+
+        return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
+    /**
+     * Posts a notification in the notification bar when a transition is detected.
+     * If the user clicks the notification, control goes to the MainActivity.
+     */
+    private void sendNotification(String notificationDetails) {
+//        // Create an explicit content Intent that starts the main Activity.
+//        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+//
+//        // Construct a task stack.
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//
+//        // Add the main Activity to the task stack as the parent.
+//        stackBuilder.addParentStack(MainActivity.class);
+//
+//        // Push the content Intent onto the stack.
+//        stackBuilder.addNextIntent(notificationIntent);
+//
+//        // Get a PendingIntent containing the entire back stack.
+//        PendingIntent notificationPendingIntent =
+//                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        // Get a notification builder that's compatible with platform versions >= 4
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//
+//        // Define the notification settings.
+//        builder.setSmallIcon(R.drawable.ic_launcher)
+//                // In a real app, you may want to use a library like Volley
+//                // to decode the Bitmap.
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+//                        R.drawable.ic_launcher))
+//                .setColor(Color.RED)
+//                .setContentTitle(notificationDetails)
+//                .setContentText(getString(R.string.geofence_transition_notification_text))
+//                .setContentIntent(notificationPendingIntent);
+//
+//        // Dismiss notification once the user touches it.
+//        builder.setAutoCancel(true);
+//
+//        // Get an instance of the Notification manager
+//        NotificationManager mNotificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        // Issue the notification
+//        mNotificationManager.notify(0, builder.build());
     }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-    }
-
 }

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
+import android.net.wifi.WifiConfiguration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
@@ -27,11 +30,13 @@ import java.util.List;
 
 public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
     private String username;
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<Geofence> mGeofenceList;
     private boolean connectedToGoogleApi;
     private PendingIntent mGeofenceRequestIntent;
+    private PendingIntent mGeofencePendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +67,8 @@ public class LoggedInActivity extends ActionBarActivity
      */
     protected void setupGeofences() {
         Resources res = getResources();
-        String[] resLocations = res.getStringArray(R.array.location_array);
-        String radius = res.getString(R.string.radius);
+        String[] resLocations = new String[res.getStringArray(R.array.location_array).length];
+        resLocations = res.getStringArray(R.array.location_array);
 
         List<FenceLocation> locations = new ArrayList<FenceLocation>();
 
@@ -97,18 +102,16 @@ public class LoggedInActivity extends ActionBarActivity
     }
 
     private PendingIntent getGeofencePendingIntent() {
-//        // Reuse the PendingIntent if we already have it.
-//        if (mGeofencePendingIntent != null) {
-//            return mGeofencePendingIntent;
-//        }
-//        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-//        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-//        // calling addGeofences() and removeGeofences().
-//        return PendingIntent.getService(this, 0, intent, PendingIntent.
-//                FLAG_UPDATE_CURRENT);
-        return null;
+        // Reuse the PendingIntent if we already have it.
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofences() and removeGeofences().
+        return PendingIntent.getService(this, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -222,15 +225,11 @@ public class LoggedInActivity extends ActionBarActivity
         connectedToGoogleApi = true;
         // Get the PendingIntent for the geofence monitoring request.
         // Send a request to add the current geofences.
-        mGeofenceRequestIntent = getGeofenceTransitionPendingIntent();
-        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList,
-                mGeofenceRequestIntent);
-        Toast.makeText(this, "Starting geofence transition service", Toast.LENGTH_SHORT).show();
-    }
+        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient,
+                getGeofencingRequest(),
+                getGeofencePendingIntent());
 
-    private PendingIntent getGeofenceTransitionPendingIntent() {
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Toast.makeText(this, "Starting geofence transition service", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -286,5 +285,8 @@ public class LoggedInActivity extends ActionBarActivity
         }
     };
 
+//    public void onResult (Status status) {
+//        Toast.makeText(this, "callback after adding geofences", Toast.LENGTH_SHORT).show();
+//    }
 
 }
