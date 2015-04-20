@@ -45,6 +45,9 @@ public class PDLogginInActivity extends ActionBarActivity {
 
     public void onResidentListClicked(View view){
         Intent intent = new Intent(this, UserSelectActivity.class);
+        Intent intent = new Intent(this, ListOfResidentsActivity.class);
+        //pass username to LoggedInActivity
+        intent.putExtra("PD_USERNAME", username);
         startActivity(intent);
     }
 

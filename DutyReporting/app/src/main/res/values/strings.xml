@@ -25,5 +25,4 @@
     <string name="radius">500</string>
     <string name="title_activity_all_violations">AllViolationsActivity</string>
     <string name="title_activity_user_select">UserSelectActivity</string>
-
 </resources>

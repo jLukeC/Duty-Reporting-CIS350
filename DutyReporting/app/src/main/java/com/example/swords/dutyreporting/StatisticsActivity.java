@@ -25,11 +25,18 @@ public class StatisticsActivity extends ActionBarActivity {
 
         ParseHandler handler = new ParseHandler(resident);
         ArrayList<String> hrsWorked = handler.getInAndOut();
+        String username = intent.getStringExtra("USERNAME");
+        TextView header = (TextView)findViewById(R.id.user_welcome);
+        header.setText("Statistics for " + username);
+
+        ParseHandler handler = new ParseHandler(username);
+        ArrayList<String> hrsWorked = handler.getHoursWorkedPerWeek();
         Set<String> warnings = handler.getWarnings();
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
         for (String s : hrsWorked) {
             hrsTextView.append(s + '\n');
+            hrsTextView.append(s +  "hrs" + '\n');
         }
 
         TextView warningTextView = (TextView)findViewById(R.id.warnings);

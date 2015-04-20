@@ -53,7 +53,6 @@
             android:name=".SpecificUserDataActivity"
             android:label="@string/title_activity_specific_user_data" >
         </activity>
-
         <service android:name=".GeofenceTransitionsIntentService" />
 
         <activity
@@ -67,6 +66,7 @@
             android:name=".UserSelectActivity"
             android:label="@string/title_activity_user_select" >
         </activity>
+        <service android:name=".GeofenceTransitionsIntentService"/>
     </application>
 
 </manifest>

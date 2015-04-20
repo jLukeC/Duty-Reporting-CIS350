@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ParseHandler {
     private static String username;
+    private String username;
     public ParseHandler(String u) {
         // get parse information for that username
         username = u;
@@ -69,6 +70,7 @@ public class ParseHandler {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
                 residents.add(p.getString("name"));
+                residents.add(p.getString("name"));
             }
         }
         catch (ParseException e) {
@@ -77,6 +79,7 @@ public class ParseHandler {
         return residents;
     }
 
+<<<<<<< HEAD
     /*Returns time of check-in and check-out*/
     public ArrayList<String> getInAndOut() {
         // get parse data on hours per day and convert it to week
