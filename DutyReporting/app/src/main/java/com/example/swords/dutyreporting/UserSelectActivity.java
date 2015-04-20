@@ -37,7 +37,7 @@ public class UserSelectActivity extends ActionBarActivity {
                     return;
                 } else {
                     String res = parent.getItemAtPosition(pos).toString();
-                    Intent intent = new Intent(UserSelectActivity.this, StatisticsActivity.class);
+                    Intent intent = new Intent(UserSelectActivity.this, InAndOutActivity.class);
                     intent.putExtra("resident", res);
                     startActivity(intent);
                 }

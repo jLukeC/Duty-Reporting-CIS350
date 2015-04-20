@@ -5,26 +5,44 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 
-public class PDLogginInActivity extends ActionBarActivity {
-
-    private String username;
+public class InAndOutActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdloggin_in);
-        Intent i = getIntent();
-        username = i.getStringExtra("USERNAME");
+        setContentView(R.layout.activity_statistics);
+        Intent intent = getIntent();
+
+        String resident = intent.getStringExtra("resident");
+        TextView header = (TextView)findViewById(R.id.user_welcome);
+        header.setText("Statistics for " + resident);
+
+        ParseHandler handler = new ParseHandler(resident);
+        ArrayList<String> hrsWorked = handler.getInAndOut();
+        Set<String> warnings = handler.getWarnings();
+
+        TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
+        for (String s : hrsWorked) {
+            hrsTextView.append(s + '\n');
+        }
+
+        TextView warningTextView = (TextView)findViewById(R.id.warnings);
+        for (String s : warnings) {
+            warningTextView.append(s + '\n');
+        }
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_pdloggin_in, menu);
+        getMenuInflater().inflate(R.menu.menu_statistics, menu);
         return true;
     }
 
@@ -41,22 +59,5 @@ public class PDLogginInActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onResidentListClicked(View view){
-        Intent intent = new Intent(this, UserSelectActivity.class);
-        //pass username to LoggedInActivity
-        intent.putExtra("PD_USERNAME", username);
-        startActivity(intent);
-    }
-
-    public void onAggregateDataClicked(View view){
-
-    }
-
-    public void onViolationClicked(View view){
-        Intent intent = new Intent(this, AllViolationsActivity.class);
-        intent.putExtra("PD_USERNAME", username);
-        startActivity(intent);
     }
 }

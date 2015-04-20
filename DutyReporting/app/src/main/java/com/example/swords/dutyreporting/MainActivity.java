@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
     private EditText et_username;
     private EditText et_password;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,48 +48,35 @@ public class MainActivity extends ActionBarActivity {
         //if "Log In" is clicked with correct username/password combo, go to next activity
         //for testing I have saved "user" as the correct username and "pass" as the correct password
         b_log_in.setOnClickListener(
-        new View.OnClickListener() {
-            public void onClick(View view) {
-                String username = et_username.getText().toString();
-                String password = et_password.getText().toString();
-                ParseHandler handler = new ParseHandler(username);
-                if (ParseHandler.getSupervisors().contains(username)) {
-                    pd_log_in();
-                    /*if (ParseHandler.getPassword(username).contains(password)) {
-                        pd_log_in();
-                    } else {
-                        Context context = getApplicationContext();
-                        int duration = Toast.LENGTH_SHORT;
-                        CharSequence text = password;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }*/
-                } else if (ParseHandler.getResidents().contains(username)) {
-                    log_in();
-                    /*if (ParseHandler.getPassword(username).contains(password)) {
-                        log_in();
-                    } else {
-                        Context context = getApplicationContext();
-                        int duration = Toast.LENGTH_SHORT;
-                        CharSequence text = password;
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }*/
-                } else {
-                    Context context = getApplicationContext();
-                    int duration = Toast.LENGTH_SHORT;
-                    CharSequence text = "Incorrect username/password combination";
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                if (et_username.getText().toString().equals("user") && et_password.getText().toString().equals("pass")) {
-                    log_in();
-                }
-                else if (et_username.getText().toString().equals("pduser") && et_password.getText().toString().equals("pass")) {
-                    pd_log_in();
-                }
-            }
-        });
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+                        String username = et_username.getText().toString();
+                        String password = et_password.getText().toString();
+                        ParseHandler handler = new ParseHandler(username);
+                        if (ParseHandler.getSupervisors().contains(username)) {
+                            pd_log_in();
+                        } else if (ParseHandler.getResidents().contains(username)) {
+                            log_in();
+                        } else {
+                            Context context = getApplicationContext();
+                            int duration = Toast.LENGTH_SHORT;
+                            CharSequence text = "Incorrect username/password combination";
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                            if (et_username.getText().toString().equals("user") && et_password.getText().toString().equals("pass")) {
+                                log_in();
+                            } else if (et_username.getText().toString().equals("pduser") && et_password.getText().toString().equals("pass")) {
+                                pd_log_in();
+                            }
+                        }
+                    }
+                });
+
     }
+
+
+
+
 
     public void log_in () {
         Intent intent = new Intent(this, LoggedInActivity.class);

@@ -96,8 +96,8 @@ public class ParseHandler {
                 String startString = df.format(start);
                 String endString = df.format(end);
                 hrsData.add("Check-In: " + startString + "\n" +
-                            "Check-Out: " + endString + "\n" +
-                            "Hours: " + Double.toString(hrs) +"\n");
+                        "Check-Out: " + endString + "\n" +
+                        "Hours: " + Double.toString(hrs) +"\n");
             }
         }
         catch (ParseException e) {

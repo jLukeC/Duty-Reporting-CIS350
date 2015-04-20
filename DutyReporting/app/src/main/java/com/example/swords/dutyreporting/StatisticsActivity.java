@@ -19,12 +19,6 @@ public class StatisticsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_statistics);
         Intent intent = getIntent();
 
-        String resident = intent.getStringExtra("resident");
-        TextView header = (TextView)findViewById(R.id.user_welcome);
-        header.setText("Statistics for " + resident);
-
-        ParseHandler handler = new ParseHandler(resident);
-        ArrayList<String> hrsWorked = handler.getInAndOut();
         String username = intent.getStringExtra("USERNAME");
         TextView header = (TextView)findViewById(R.id.user_welcome);
         header.setText("Statistics for " + username);
@@ -35,7 +29,6 @@ public class StatisticsActivity extends ActionBarActivity {
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
         for (String s : hrsWorked) {
-            hrsTextView.append(s + '\n');
             hrsTextView.append(s +  "hrs" + '\n');
         }
 
