@@ -28,6 +28,7 @@ public class ParseHandler {
         username = u;
     }
 
+    //get password associated with username
     public static Set<String> getPassword() {
         Set<String> passwords = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");

@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class InAndOutActivity extends ActionBarActivity {
 
+    //displays a resident's check-in, check-out, and hours as well as violations
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
