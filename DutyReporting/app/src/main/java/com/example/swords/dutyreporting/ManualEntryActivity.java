@@ -78,20 +78,46 @@ public class ManualEntryActivity extends ActionBarActivity {
         int month_selected = start.get(Calendar.MONTH) + 1;
         int day_selected = start.get(Calendar.DAY_OF_MONTH);
         int year_selected = start.get(Calendar.YEAR);
-        int hour = start.get(Calendar.HOUR_OF_DAY);
-        int min = start.get(Calendar.MINUTE);
-        start_date.setText((month_selected) + "-" + day_selected + "-" + year_selected + "  " + hour + ":" + min);
+        String time = prettyTime(start.get(Calendar.HOUR_OF_DAY), start.get(Calendar.MINUTE));
+        start_date.setText((month_selected) + "-" + day_selected + "-" + year_selected + "  " + time);
         end_date.setText("");
     }
 
+    private static String prettyTime(int hour, int min){
+        String ampm = "";
+        String hourString = "";
+        String minString = "";
+        if (hour > 12){
+            ampm = " PM";
+        }
+        else{
+            ampm = " AM";
+        }
+        if (hour < 10){
+            hourString = "0" + Integer.toString(hour);
+        }
+        else if((hour > 12) && (hour < 22)){
+            hourString = "0" + Integer.toString(hour -12);
+        }
+        else{
+            hourString = Integer.toString(hour);
+        }
+        if(min < 10){
+            minString = "0" + Integer.toString(min);
+        }
+        else{
+            minString = Integer.toString(min);
+        }
+        String pretty = hourString + ":" + minString + ampm;
+        return pretty;
+    }
     private static void updateEndText(){
         checkForNextDay();
         int month_selected = end.get(Calendar.MONTH) + 1;
         int day_selected = end.get(Calendar.DAY_OF_MONTH);
         int year_selected = end.get(Calendar.YEAR);
-        int hour = end.get(Calendar.HOUR_OF_DAY);
-        int min = end.get(Calendar.MINUTE);
-        end_date.setText((month_selected) + "-" + day_selected + "-" + year_selected + "  " + hour + ":" +min);
+        String time = prettyTime(end.get(Calendar.HOUR_OF_DAY), end.get(Calendar.MINUTE));
+        end_date.setText((month_selected) + "-" + day_selected + "-" + year_selected + "  " + time);
     }
 
     public void showStartTimeDiaglog(View v){
