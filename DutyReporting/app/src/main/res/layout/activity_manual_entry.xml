@@ -82,18 +82,18 @@
         android:focusedMonthDateColor="#FF0000"/>
 
     <TextView
-        android:layout_width="80pt"
+        android:layout_width="90pt"
         android:layout_height="20pt"
         android:id="@+id/start_date_text"
-        android:layout_alignTop="@+id/pick_start_time"
-        android:layout_alignLeft="@+id/end_date_text"
-        android:layout_alignStart="@+id/end_date_text"
         android:gravity="center"
         android:textColor= "#FF0000"
-        android:textSize="9pt" />
+        android:textSize="9pt"
+        android:layout_alignTop="@+id/pick_start_time"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
-        android:layout_width="80pt"
+        android:layout_width="90pt"
         android:layout_height="20pt"
         android:id="@+id/end_date_text"
         android:layout_alignTop="@+id/pick_end_time"

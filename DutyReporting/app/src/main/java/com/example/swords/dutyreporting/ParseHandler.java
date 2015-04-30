@@ -70,7 +70,6 @@ public class ParseHandler {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
                 residents.add(p.getString("name"));
-                residents.add(p.getString("name"));
             }
         }
         catch (ParseException e) {
