@@ -37,57 +37,67 @@ Parse.Cloud.define('dutyViolations', function(request, response) {
   			}
   			totalHours += results[i].get('hours');
   		}
-
+        console.log('the total number of hours in the last month is: ' + totalHours);
   		if (totalHours/4 > 80) {
-  			violations.monthHourViolation = 2;
-  		} else if (totalHours/4 > 75) {
-  			violations.monthHourViolation = 1;
+  			violations.monthHourViolation = true;
   		} else {
-  			violations.monthHourViolation = 0;
+  			violations.monthHourViolation = false;
   		}
 
-  		//Check for 1 day off in previous week
+  		//Check for 1 day off in each of the previous weeks
         //Check to see how many days in the past week were worked on
-        var daysWorkedLastWeek = 0;
-        for (var i = 0; i < 7; i++) {
-            var tempDateCheck = new Date(Date.now() - (i * oneDay));
-            
-            //Once we know the date to check, cycle through the query response to see if any date corresponds to the current one
-            var workedOnDate = false;
-            for (var j = 0; j < results.length; j++) {
-                if (sameDate(tempDateCheck, new Date(results[j].get('startTime')))) {
-                    workedOnDate = true;
-                    break;
+        violations.weekHourViolation = [];
+
+        for (var week = 0; week < 4; week++) {
+            var daysWorkedLastWeek = 0;
+            for (var i = 0; i < 7; i++) {
+                var tempDateCheck = new Date(Date.now() - (i * oneDay) - (week * 7 * oneDay));
+                
+                //Once we know the date to check, cycle through the query response to see if any date corresponds to the current one
+                var workedOnDate = false;
+                for (var j = 0; j < results.length; j++) {
+                    if (sameDate(tempDateCheck, new Date(results[j].get('startTime')))) {
+                        workedOnDate = true;
+                        break;
+                    }
+                }
+                if (workedOnDate) {
+                    daysWorkedLastWeek++;
                 }
             }
-            if (workedOnDate) {
-                daysWorkedLastWeek++;
+
+            if (daysWorkedLastWeek === 7) {
+            violations.weekHourViolation.push(new Date(Date.now() - (week * 7 * oneDay)));
             }
         }
 
-  		if (daysWorkedLastWeek === 7) {
-  			violations.weekHourViolation = 2;
-  		} else if (daysWorkedLastWeek === 6) {
-            violations.weekHourViolation = 1;
-        } else {
-            violations.weekHourViolation = 0;
-        }
+  		
         
 		//Check for at least eight hours off
-        var startDate = new Date(results[0].get('startTime'));
-        var endTime = startDate.getTime() + (oneHour * results[0].get('hours'));
-		var hoursElapsed = (Date.now() - endTime)/oneHour;
-		if (typeof results[0] === 'undefined') {
-			violations.restPeriodViolation = 0;
-		} else if (hoursElapsed < 8) {
-			violations.restPeriodViolation = 2;
-		} else if (hoursElapsed < 10) {
-			violations.restPeriodViolation = 1;
-		} else {
-			violations.restPeriodViolation = 0;
-		}
+        violations.restPeriodViolation = [];
+
+        for (var i = results.length - 2; i >= 0; i--) {
+            var prevEndTime = new Date(results[i + 1].get('startTime').getTime() 
+                + (oneHour * results[i + 1].get('hours') + 8));
+            if ((results[i].get('startTime').getTime() - prevEndTime.getTime()) < 0) {
+                violations.restPeriodViolation.push(results[i].get('startTime'));
+            } 
+        }
+
+
+        //Check for 24 + 4 violations
+        violations.shiftViolations = [];
+        for (var i = 0; i < results.length; i++) {
+            if (typeof results[i] === 'undefined') {
+                continue;
+            }
+            if (results[i].get('hours') > 28) {
+                violations.shiftViolations.push(results[i].get('startTime'));
+            }
+        }
+
 		
-        response.success(violations);
+        response.success(JSON.stringify(violations));
   	},
   	error: function(error) {
   		response.error('Retreiving user data failed');
