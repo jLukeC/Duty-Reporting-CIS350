@@ -23,8 +23,8 @@ Parse.Cloud.define('averageLengthBetweenDayOff'), function(request, response) {
             var daysOff = 0;
             for (var i = 0; i < 28; i++) {
                 var currentDay = new Date(Date.now() - (i * oneDay));
-
                 var workedDay = false;
+                
                 for (var j = 0; j < results.length; j++) {
                     if (sameDate(results[j].get('startTime'), currentDay)) {
                         workedDay = true;
@@ -35,7 +35,6 @@ Parse.Cloud.define('averageLengthBetweenDayOff'), function(request, response) {
                     daysOff++;
                 }
             }
-
             response.success(28/daysOff);
         },
         error: function(error) {

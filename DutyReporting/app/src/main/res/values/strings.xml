@@ -27,5 +27,6 @@
     <string name="title_activity_user_select">UserSelectActivity</string>
     <string name="title_activity_in_and_out">InAndOutActivity</string>
     <string name="shifts">Shifts</string>
+    <string name="title_activity_averages">AveragesActivity</string>
 
 </resources>

@@ -33,7 +33,6 @@ public class LoggedInActivity extends ActionBarActivity
     private boolean succesfulConnection;
     private static final String TAG = "LoggedInActivity";
     private boolean connectedToGoogleApi;
-    private PendingIntent mGeofencePendingIntent;
     private boolean isCheckedIn;
     private Handler handler;
 
