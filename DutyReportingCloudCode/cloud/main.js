@@ -36,7 +36,8 @@ Parse.Cloud.define('averageLengthBetweenDayOff', function(request, response) {
                     daysOff++;
                 }
             }
-            response.success(28/daysOff);
+            var avg = 28/daysOff;
+            response.success(avg.toString());
         },
         error: function(error) {
             response.error('Retreiving user data failed');
