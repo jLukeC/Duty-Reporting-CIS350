@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class StatisticsActivity extends ActionBarActivity {
+public class StatisticsActivity extends ActionBarActivity implements WarningDisplay {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +25,15 @@ public class StatisticsActivity extends ActionBarActivity {
 
         ParseHandler handler = new ParseHandler(username);
         ArrayList<String> hrsWorked = handler.getHoursWorkedPerWeek();
-        Set<String> warnings = handler.getWarnings();
+        handler.getWarnings(this, username);
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
         for (String s : hrsWorked) {
-            hrsTextView.append(s + '\n');
+            hrsTextView.append(s +  "hrs" + '\n');
         }
+    }
 
+    public void addWarnings (Set<String> warnings, String resident) {
         TextView warningTextView = (TextView)findViewById(R.id.warnings);
         for (String s : warnings) {
             warningTextView.append(s + '\n');

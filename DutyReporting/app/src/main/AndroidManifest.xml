@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -42,7 +41,39 @@
             android:name=".PDLogginInActivity"
             android:label="@string/title_activity_pdloggin_in" >
         </activity>
-        <service android:name=".GeofenceTransitionsIntentService"/>
+        <activity
+            android:name=".AggregateDataActivity"
+            android:label="@string/title_activity_aggregate_data" >
+        </activity>
+        <activity
+            android:name=".ListOfResidentsActivity"
+            android:label="@string/title_activity_list_of_residents" >
+        </activity>
+        <activity
+            android:name=".SpecificUserDataActivity"
+            android:label="@string/title_activity_specific_user_data" >
+        </activity>
+
+        <service android:name=".GeofenceTransitionsIntentService" />
+
+        <activity
+            android:name=".AllViolationsActivity"
+            android:label="@string/title_activity_all_violations" >
+        </activity>
+
+        <service android:name=".GeofenceTransitionsIntentService" />
+
+        <activity
+            android:name=".UserSelectActivity"
+            android:label="@string/title_activity_user_select" >
+        </activity>
+
+        <service android:name=".GeofenceTransitionsIntentService" />
+
+        <activity
+            android:name=".InAndOutActivity"
+            android:label="@string/title_activity_in_and_out" >
+        </activity>
     </application>
 
 </manifest>
