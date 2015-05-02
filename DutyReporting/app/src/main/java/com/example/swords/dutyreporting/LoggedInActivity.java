@@ -139,28 +139,25 @@ public class LoggedInActivity extends ActionBarActivity
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = null;
+        CharSequence text = "Unable to verify location.";
 
-        if (!connectedToGoogleApi) {
-            text = "Unable to verify location.";
-        } else {
+        if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
 
-            float testLat = (float) 39.950017;
-            float testLong = (float) -75.196867;
+            if (lastKnownLocation != null) {
+                float[] results = new float[1];
+                Location.distanceBetween(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                        39.95013175, -75.1937449, results);
 
-            float[] results = new float[1];
-            Location.distanceBetween(testLat, testLong,
-                    39.95013175, -75.1937449, results);
-
-            Log.v(TAG, "Distance = " + results[0]);
+                Log.v(TAG, "Distance = " + results[0]);
 
 
-            if (results[0] < 1000) {
-                text = " Your location has been verified, thank you for checking in!";
-            } else {
-                text = "Your location does not appear to be near the hospital...";
+                if (results[0] < 1000) {
+                    text = " Your location has been verified, thank you for checking in!";
+                } else {
+                    text = "Your location does not appear to be near the hospital...";
+                }
             }
         }
         Toast toast = Toast.makeText(context, text, duration);
@@ -171,28 +168,25 @@ public class LoggedInActivity extends ActionBarActivity
     public void onCheckOutButtonClick(View view){
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = null;
+        CharSequence text = "Unable to verify location.";
 
-        if (!connectedToGoogleApi) {
-            text = "Unable to verify location.";
-        } else {
+        if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
+            if (lastKnownLocation != null) {
 
-            float testLat = (float) 39.950017;
-            float testLong = (float) -75.196867;
+                float[] results = new float[1];
+                Location.distanceBetween(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                        39.95013175, -75.1937449, results);
 
-            float[] results = new float[1];
-            Location.distanceBetween(testLat, testLong,
-                    39.95013175, -75.1937449, results);
-
-            Log.v(TAG, "Distance = " + results[0]);
+                Log.v(TAG, "Distance = " + results[0]);
 
 
-            if (results[0] < 1000) {
-                text = " Your location has been verified, thank you for checking out!";
-            } else {
-                text = "Your location does not appear to be near the hospital...";
+                if (results[0] < 1000) {
+                    text = " Your location has been verified, thank you for checking out!";
+                } else {
+                    text = "Your location does not appear to be near the hospital...";
+                }
             }
         }
         Toast toast = Toast.makeText(context, text, duration);

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.Set;
 
 
-public class AllViolationsActivity extends ActionBarActivity {
+public class AllViolationsActivity extends ActionBarActivity implements WarningDisplay {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +25,19 @@ public class AllViolationsActivity extends ActionBarActivity {
 
         TextView residentsListView = (TextView)findViewById(R.id.residents_list);
         for (String res : residents) {
-            residentsListView.append("--------");
-            residentsListView.append(res + '\n');
             ParseHandler handler = new ParseHandler(res);
-            Set<String> warnings = handler.getWarnings();
-            for (String s : warnings) {
-                residentsListView.append(s + '\n');
-            }
+            handler.getWarnings(this, res);
         }
 
+    }
+
+    public void addWarnings (Set<String> warnings, String resident) {
+        TextView residentsListView = (TextView)findViewById(R.id.residents_list);
+        residentsListView.append("--------");
+        residentsListView.append(resident + '\n');
+        for (String s: warnings) {
+            residentsListView.append(s + '\n');
+        }
     }
 
 

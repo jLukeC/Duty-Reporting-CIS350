@@ -2,9 +2,14 @@ package com.example.swords.dutyreporting;
 
 import android.util.Log;
 
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +29,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ParseHandler {
     private static String username;
+    public Set<String> warnings;
+
     public ParseHandler(String u) {
         // get parse information for that username
         username = u;
@@ -64,7 +72,7 @@ public class ParseHandler {
     public static Set<String> getResidents() {
         Set<String> residents = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
-        query.whereEqualTo("isSupervisor",false);
+        query.whereEqualTo("isSupervisor", false);
         try {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
@@ -90,8 +98,10 @@ public class ParseHandler {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
                 Date start = p.getDate("startTime");
-                Date end = p.getDate("endTime");
-                double hrs = getDateDiff(start,end, TimeUnit.HOURS);
+                double hours = p.getDouble("hours");
+                Date end = new Date((long) (start.getTime() + (hours * 1000 * 60 * 60)));
+
+                double hrs = getDateDiff(start, end, TimeUnit.HOURS);
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
                 String startString = df.format(start);
                 String endString = df.format(end);
@@ -119,7 +129,10 @@ public class ParseHandler {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
                 Date start = p.getDate("startTime");
-                Date end = p.getDate("endTime");
+
+                double hours = p.getDouble("hours");
+                Date end = new Date((long) (start.getTime() + (hours * 1000 * 60 * 60)));
+
                 double hrs = getDateDiff(start,end, TimeUnit.HOURS);
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                 String reportDate = df.format(start);
@@ -133,72 +146,46 @@ public class ParseHandler {
         return hrsData;
     }
 
-    public Set<String> getWarnings() {
+    public void getWarnings(final WarningDisplay disp, final String resident) {
+        final Set<String> warnings = new TreeSet<String>();
+
         // get list of warnings from parse
-        Set<String> warnings = new TreeSet<String>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
-        query.whereEqualTo("username", username);
-        try {
-            List<ParseObject> pObjs = query.find();
-            // hours between shifts
-            Date lastShiftEnd = null;
-            Date startOfWeek = null;
-            int hrsThisWeek= 0;
-            int workDaysInARow = 0;
-            for (ParseObject p : pObjs) {
-                Date start = p.getDate("startTime");
-                Date end = p.getDate("endTime");
-                double hrsWorked = getDateDiff(start,end, TimeUnit.HOURS);
-                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-                String reportDate = df.format(start);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("username", username);
+        ParseCloud.callFunctionInBackground("dutyViolations", params, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    try {
+                        JSONObject obj = new JSONObject(result);
+                        Boolean monthViolation = obj.getBoolean("monthHourViolation");
+                        JSONArray weekViolations = obj.getJSONArray("weekHourViolation");
+                        JSONArray restViolations = obj.getJSONArray("restPeriodViolation");
+                        JSONArray shiftViolations = obj.getJSONArray("shiftViolations");
 
-                if (hrsWorked > 28) {
-                    warnings.add("Worked more than 24+4 hrs on " + reportDate);
-                }
+                        if (monthViolation) {
+                            warnings.add("Worked more than an average of 80 hours a week in the past month");
+                        }
+                        for (int i = 0; i < weekViolations.length(); i++) {
+                            warnings.add("Too many days worked in a row starting at " + weekViolations.getString(i));
+                        }
+                        for (int i = 0; i < restViolations.length(); i++) {
+                            warnings.add("Did not get 8hr break before shift at " + restViolations.getString(i));
+                        }
+                        for (int i = 0; i < shiftViolations.length(); i++) {
+                            warnings.add("Worked more than 24+4 hrs at " + shiftViolations.getString(i));
+                        }
 
-                if (lastShiftEnd != null) {
-                    double hrsOff= getDateDiff(lastShiftEnd,start, TimeUnit.HOURS);
+                        disp.addWarnings(warnings, resident);
 
-                    if (hrsOff < 8) {
-                        warnings.add("Did not get 8hr break between shifts on " + reportDate);
+                    } catch (Exception exc) {
+                        Log.d("score", "failed to parse JSON violations");
                     }
-
-                    if (hrsOff < 24) {
-                        workDaysInARow++;
-                    }
-
-                    if (workDaysInARow >= 7) {
-                        warnings.add("Too many days worked in a row ending at " + reportDate);
-                        workDaysInARow = 0;
-                    }
-                }
-
-                if (startOfWeek == null) {
-                    startOfWeek = start;
-                }
-                double howFarIntoWeek = getDateDiff(startOfWeek,end, TimeUnit.DAYS);
-
-                if (howFarIntoWeek < 7) {
-                    hrsThisWeek += hrsWorked;
                 } else {
-                    // reset the week
-                    startOfWeek = start;
-                    hrsThisWeek = 0;
+                    Log.d("score","failed, parse Error");
                 }
-
-                if (hrsThisWeek > 80) {
-                    warnings.add("Make sure you average 80hrs/week after " + reportDate);
-                    hrsThisWeek = 0;
-                }
-
-                lastShiftEnd = end;
             }
-        }
-        catch (ParseException e) {
-            Log.d("score","failed, parse Error");
-        }
+        });
 
-        return warnings;
     }
 
     public boolean setHoursWorked(Calendar start, Calendar end) {

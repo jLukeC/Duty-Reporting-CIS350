@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class InAndOutActivity extends ActionBarActivity {
+public class InAndOutActivity extends ActionBarActivity implements WarningDisplay {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +25,16 @@ public class InAndOutActivity extends ActionBarActivity {
 
         ParseHandler handler = new ParseHandler(resident);
         ArrayList<String> hrsWorked = handler.getInAndOut();
-        Set<String> warnings = handler.getWarnings();
+        handler.getWarnings(this, resident);
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
         for (String s : hrsWorked) {
             hrsTextView.append(s + '\n');
         }
 
+    }
+
+    public void addWarnings (Set<String> warnings, String resident) {
         TextView warningTextView = (TextView)findViewById(R.id.warnings);
         for (String s : warnings) {
             warningTextView.append(s + '\n');
