@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,18 +23,19 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 
 public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private String username;
-    private GoogleApiClient mGoogleApiClient;
+    static private GoogleApiClient mGoogleApiClient;
     private boolean succesfulConnection;
     private static final String TAG = "LoggedInActivity";
-    private ArrayList<Geofence> mGeofenceList;
     private boolean connectedToGoogleApi;
-    private PendingIntent mGeofenceRequestIntent;
+    private PendingIntent mGeofencePendingIntent;
+    private boolean isCheckedIn;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class LoggedInActivity extends ActionBarActivity
         Intent intent = getIntent();
         username = intent.getStringExtra("USERNAME");
         connectedToGoogleApi = false;
+        isCheckedIn = false;
 
         //Checks to make sure that app can connect to google services
         if (isGooglePlayServicesAvailable()) {
@@ -53,62 +56,11 @@ public class LoggedInActivity extends ActionBarActivity
                     .addApi(LocationServices.API)
                     .build();
             mGoogleApiClient.connect();
-
-            mGeofenceList = new ArrayList<Geofence>();
-            setupGeofences();
-        }
-    }
-
-    /**
-     * This function creates and adds geofences to the list from the constants files
-     */
-    protected void setupGeofences() {
-        Resources res = getResources();
-        String[] resLocations = res.getStringArray(R.array.location_array);
-        String radius = res.getString(R.string.radius);
-
-        List<FenceLocation> locations = new ArrayList<FenceLocation>();
-
-        for (int i = 0; i < resLocations.length; i++) {
-            locations.add(new FenceLocation(resLocations[i]));
+            handler = new Handler();
+        } else {
+            Toast toast = Toast.makeText(this, "Location Services Unavailable", Toast.LENGTH_SHORT);
         }
 
-        for (FenceLocation loc : locations) {
-            mGeofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId(loc.getName())
-
-                    .setCircularRegion(
-                            loc.getLatitude(),
-                            loc.getLongitude(),
-                            1000
-                    )
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build());
-        }
-    }
-
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(mGeofenceList);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-//        // Reuse the PendingIntent if we already have it.
-//        if (mGeofencePendingIntent != null) {
-//            return mGeofencePendingIntent;
-//        }
-//        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-//        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-//        // calling addGeofences() and removeGeofences().
-//        return PendingIntent.getService(this, 0, intent, PendingIntent.
-//                FLAG_UPDATE_CURRENT);
-        return null;
     }
 
 
@@ -139,64 +91,57 @@ public class LoggedInActivity extends ActionBarActivity
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = null;
+        CharSequence text = "Unable to verify location.";;
 
-        if (!connectedToGoogleApi) {
-            text = "Unable to verify location.";
-        } else {
+        if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
 
-            float testLat = (float) 39.950017;
-            float testLong = (float) -75.196867;
+            if (lastKnownLocation != null) {
 
-            float[] results = new float[1];
-            Location.distanceBetween(testLat, testLong,
-                    39.95013175, -75.1937449, results);
-
-            Log.v(TAG, "Distance = " + results[0]);
+                float[] results = new float[1];
+                Location.distanceBetween(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                        39.95013175, -75.1937449, results);
 
 
-            if (results[0] < 1000) {
-                text = " Your location has been verified, thank you for checking in!";
-            } else {
-                text = "Your location does not appear to be near the hospital...";
+                if (results[0] < 500) {
+                    text = " Your location has been verified, thank you for checking in!";
+                } else {
+                    text = "Your location does not appear to be near the hospital...";
+                }
             }
         }
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        isCheckedIn = true;
     }
 
     //record check out
     public void onCheckOutButtonClick(View view){
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = null;
+        CharSequence text = "Unable to verify location.";
 
-        if (!connectedToGoogleApi) {
-            text = "Unable to verify location.";
-        } else {
+        if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
 
-            float testLat = (float) 39.950017;
-            float testLong = (float) -75.196867;
+            if (lastKnownLocation != null) {
 
-            float[] results = new float[1];
-            Location.distanceBetween(testLat, testLong,
-                    39.95013175, -75.1937449, results);
+                float[] results = new float[1];
+                Location.distanceBetween(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                        39.95013175, -75.1937449, results);
 
-            Log.v(TAG, "Distance = " + results[0]);
-
-
-            if (results[0] < 1000) {
-                text = " Your location has been verified, thank you for checking out!";
-            } else {
-                text = "Your location does not appear to be near the hospital...";
+                if (results[0] < 500) {
+                    text = " Your location has been verified, thank you for checking out!";
+                } else {
+                    text = "Your location does not appear to be near the hospital...";
+                }
             }
         }
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        isCheckedIn = false;
     }
 
     //take to manual entry screen
@@ -222,17 +167,7 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle connectionHint) {
         connectedToGoogleApi = true;
-        // Get the PendingIntent for the geofence monitoring request.
-        // Send a request to add the current geofences.
-        mGeofenceRequestIntent = getGeofenceTransitionPendingIntent();
-        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList,
-                mGeofenceRequestIntent);
-        Toast.makeText(this, "Starting geofence transition service", Toast.LENGTH_SHORT).show();
-    }
-
-    private PendingIntent getGeofenceTransitionPendingIntent() {
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        handler.postDelayed(CheckLocation, 100);
     }
 
     /**
@@ -242,8 +177,9 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     public void onConnectionSuspended(int cause) {
         connectedToGoogleApi = false;
-    }
+        handler.removeCallbacks(CheckLocation);
 
+    }
 
     /**
      * Callback when google services connection fails
@@ -252,7 +188,6 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     public void onConnectionFailed(ConnectionResult result) {
     }
-
 
     /**
      * Checks that a connection can be made to google services
@@ -271,6 +206,43 @@ public class LoggedInActivity extends ActionBarActivity
         }
     }
 
+    private Runnable CheckLocation = new Runnable() {
+        @Override
+        public void run() {
+            Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+
+            if (lastKnownLocation == null) {
+                handler.postDelayed(this, 10000);
+                return;
+            }
+
+            float[] results = new float[1];
+            Location.distanceBetween(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                    39.95013175, -75.1937449, results);
+
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            CharSequence text = null;
+
+            if (results[0] < 500 && !isCheckedIn) {
+                text = "You have been checked in automatically!";
+                isCheckedIn = true;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            } else if (results[0] > 500 && isCheckedIn) {
+                text = "You have been checked out automatically!";
+                isCheckedIn = false;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+
+            handler.postDelayed(this, 1000*60*5);
+        }
+    };
+
 
     /**
      * Called when activity is ending, disconnects from google play services
@@ -279,14 +251,7 @@ public class LoggedInActivity extends ActionBarActivity
     protected void onDestroy() {
         super.onDestroy();
         mGoogleApiClient.disconnect();
+        handler.removeCallbacks(CheckLocation);
     }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "received", Toast.LENGTH_SHORT);
-        }
-    };
-
 
 }
