@@ -2,10 +2,8 @@ package com.example.swords.dutyreporting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.Parse;
-import com.parse.ParseObject;
-
-import java.security.MessageDigest;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,11 +29,6 @@ public class MainActivity extends ActionBarActivity {
         //initialize Parse
         Parse.initialize(this, "2DR7xvqsx4YcYsgiZ7HGfy5XBLF1fWudmD21ykku", "75gq1Es8M4imxD1SQHVWG1e1CqvNSlTYtNxRbk0T");
 
-        //test whether device is connected to Parse
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.put("objectId", "12345");
-        testObject.saveInBackground();
 
         //initialize button and text fields
         b_log_in = (Button)findViewById(R.id.log_in_button);
