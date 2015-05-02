@@ -11,42 +11,38 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class InAndOutActivity extends ActionBarActivity implements WarningDisplay {
+public class AveragesActivity extends ActionBarActivity {
 
-    //displays a resident's check-in, check-out, and hours as well as violations
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         Intent intent = getIntent();
 
-        String resident = intent.getStringExtra("resident");
+        String username = intent.getStringExtra("USERNAME");
         TextView header = (TextView)findViewById(R.id.user_welcome);
-        header.setText("Statistics for " + resident);
+        header.setText("Averages for " + username);
+        ParseHandler handler = new ParseHandler(username);
 
-        ParseHandler handler = new ParseHandler(resident);
-        ArrayList<String> hrsWorked = handler.getInAndOut();
-        handler.getWarnings(this, resident);
+        Double averageHrs = handler.getAverageShiftLength();
 
         TextView hrsTextView = (TextView)findViewById(R.id.hours_worked);
-        for (String s : hrsWorked) {
-            hrsTextView.append(s + '\n');
-        }
+        hrsTextView.append("Your average shift length is: " + averageHrs + "\n\n\n");
 
-    }
 
-    public void addWarnings (Set<String> warnings, String resident) {
+
+
+
         TextView warningTextView = (TextView)findViewById(R.id.warnings);
-        for (String s : warnings) {
-            warningTextView.append(s + '\n');
-        }
+//        for (String s : warnings) {
+//            warningTextView.append(s + '\n');
+//        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_statistics, menu);
+        getMenuInflater().inflate(R.menu.menu_averages, menu);
         return true;
     }
 

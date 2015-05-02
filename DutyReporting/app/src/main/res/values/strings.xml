@@ -12,19 +12,21 @@
     <string name="check_out">Check Out</string>
     <string name="statistics">Stats</string>
     <string name="manual_entry">Manual Entry</string>
-    <string name="title_activity_manual_entry">ManualEntryActivity</string>
-    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_manual_entry">Manual Date Entry</string>
+    <string name="title_activity_statistics">Statistics</string>
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="pick_date">Choose a start date:</string>
     <string name="save">SAVE</string>
-    <string name="title_activity_pdloggin_in">PDLogginInActivity</string>
-    <string name="title_activity_aggregate_data">AggregateDataActivity</string>
-    <string name="title_activity_list_of_residents">ListOfResidentsActivity</string>
-    <string name="title_activity_specific_user_data">SpecificUserDataActivity</string>
+    <string name="title_activity_pdloggin_in">Welcome!</string>
+    <string name="title_activity_aggregate_data">Aggregate Data</string>
+    <string name="title_activity_list_of_residents">List of Residents</string>
+    <string name="title_activity_specific_user_data">Residents Data</string>
     <string name="radius">500</string>
     <string name="title_activity_all_violations">AllViolationsActivity</string>
     <string name="title_activity_user_select">UserSelectActivity</string>
     <string name="title_activity_in_and_out">InAndOutActivity</string>
+    <string name="shifts">Shifts</string>
+    <string name="title_activity_averages">AveragesActivity</string>
 
 </resources>

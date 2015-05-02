@@ -14,6 +14,7 @@ public class UserSelectActivity extends ActionBarActivity {
 
     private Spinner spinner;
 
+    //creates the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class UserSelectActivity extends ActionBarActivity {
 
     }
 
-
+    //creates menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -61,6 +62,7 @@ public class UserSelectActivity extends ActionBarActivity {
         return true;
     }
 
+    //creates option responses
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

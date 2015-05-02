@@ -46,7 +46,6 @@ public class MainActivity extends ActionBarActivity {
         et_password = (EditText)findViewById(R.id.password_prompt);
 
         //if "Log In" is clicked with correct username/password combo, go to next activity
-        //for testing I have saved "user" as the correct username and "pass" as the correct password
         b_log_in.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {

@@ -36,6 +36,7 @@ public class ParseHandler {
         username = u;
     }
 
+    //get password associated with username
     public static Set<String> getPassword() {
         Set<String> passwords = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
@@ -77,7 +78,6 @@ public class ParseHandler {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
                 residents.add(p.getString("name"));
-                residents.add(p.getString("name"));
             }
         }
         catch (ParseException e) {
@@ -115,6 +115,36 @@ public class ParseHandler {
         }
         Collections.sort(hrsData);
         return hrsData;
+    }
+
+    public Double getAverageShiftLength() {
+        ArrayList<String> hrsData = new ArrayList<String>();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
+        query.setLimit(28);
+        query.whereEqualTo("username", username);
+
+        Double total = (double) 0;
+
+        List<ParseObject> pObjs = null;
+
+        try {
+            pObjs = query.find();
+            for (ParseObject obj : pObjs) {
+                total += obj.getDouble("hours");
+            }
+        } catch (ParseException e) {
+            Log.d("parsehandler", "failed, parse error");
+        }
+
+        Double average;
+        if (pObjs == null || pObjs.size() == 0) {
+            average = (double) 0;
+        } else {
+            average = total / pObjs.size();
+        }
+
+        return average;
     }
 
     /*Returns hours worked per week, sorted by date*/
@@ -206,6 +236,9 @@ public class ParseHandler {
         }
     }
 
+    public Double averageLengthBetweenDayOff () {
+        return null;
+    }
 
     /**
      * Get a diff between two dates
