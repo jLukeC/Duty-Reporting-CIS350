@@ -18,11 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-<<<<<<< HEAD
 import com.google.android.gms.common.api.ResultCallback;
-=======
 import com.google.android.gms.common.api.GoogleApiClient;
->>>>>>> newGeofence
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
