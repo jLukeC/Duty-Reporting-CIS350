@@ -5,8 +5,9 @@ Parse.Cloud.define("hello", function(request, response) {
   response.success("Hello world!");
 });
 
-Parse.Cloud.define('averageLengthBetweenDayOff'), function(request, response) {
-    var query = Parse.Query('HourEntry');
+Parse.Cloud.define('averageLengthBetweenDayOff', function(request, response) {
+    var query = new Parse.Query('HourEntry');
+    console.log(request.params.username);
     query.equalTo('username', request.params.username);
 
     var monthAgoDate = new Date(Date.now() - (27 * oneDay));
@@ -42,7 +43,7 @@ Parse.Cloud.define('averageLengthBetweenDayOff'), function(request, response) {
         }
     });
 
-}
+});
 
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
