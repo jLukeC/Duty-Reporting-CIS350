@@ -5,6 +5,46 @@ Parse.Cloud.define("hello", function(request, response) {
   response.success("Hello world!");
 });
 
+Parse.Cloud.define('averageLengthBetweenDayOff'), function(request, response) {
+    var query = Parse.Query('HourEntry');
+    query.equalTo('username', request.params.username);
+
+    var monthAgoDate = new Date(Date.now() - (27 * oneDay));
+    monthAgoDate.setHours(0);
+    monthAgoDate.setMinutes(0);
+    monthAgoDate.setSeconds(0);
+    monthAgoDate.setMilliseconds(0);
+    query.greaterThan('startTime', monthAgoDate);
+    query.ascending('date');
+
+    query.find({
+        success: function(results) {
+
+            var daysOff = 0;
+            for (var i = 0; i < 28; i++) {
+                var currentDay = new Date(Date.now() - (i * oneDay));
+
+                var workedDay = false;
+                for (var j = 0; j < results.length; j++) {
+                    if (sameDate(results[j].get('startTime'), currentDay)) {
+                        workedDay = true;
+                        break;
+                    }
+                }
+                if (!workedDay) {
+                    daysOff++;
+                }
+            }
+
+            response.success(28/daysOff);
+        },
+        error: function(error) {
+            response.error('Retreiving user data failed');
+        }
+    });
+
+}
+
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
