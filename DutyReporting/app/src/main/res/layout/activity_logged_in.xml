@@ -59,4 +59,15 @@
         android:layout_alignParentStart="true"
         android:onClick="onManualEntryButtonClick"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STATS"
+        android:textColor="#FFFFFF"
+        android:background="#FF0000"
+        android:id="@+id/averages_button"
+        android:onClick="onStatsButtonClick"
+        android:layout_alignTop="@+id/Forgot_button"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

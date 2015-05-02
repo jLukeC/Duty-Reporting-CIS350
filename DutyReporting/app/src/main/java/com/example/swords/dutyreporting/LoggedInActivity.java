@@ -161,6 +161,14 @@ public class LoggedInActivity extends ActionBarActivity
         startActivity(intent);
     }
 
+    //take to stats averages view
+    public void onStatsButtonClick(View view) {
+        Intent intent = new Intent(this, AveragesActivity.class);
+        //pass username to StatisticsActivity
+        intent.putExtra("USERNAME", username);
+        startActivity(intent);
+    }
+
 
     /**
      * This callback is executed when the app has connected to googleplayServices

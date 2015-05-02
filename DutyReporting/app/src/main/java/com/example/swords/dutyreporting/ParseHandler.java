@@ -225,6 +225,10 @@ public class ParseHandler {
         try {
             ParseObject new_time = new ParseObject("HourEntry");
             new_time.put("startTime", start_date);
+
+            double hours = (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60);
+
+            new_time.put("hours", end_date.getTime() - hours);
             new_time.put("endTime", end_date);
             new_time.put("username", "testuser");
             new_time.saveInBackground();
@@ -236,8 +240,27 @@ public class ParseHandler {
         }
     }
 
-    public Double averageLengthBetweenDayOff () {
-        return null;
+    public void averageLengthBetweenDayOff (final AveragesDisplay disp) {
+        final Double length = null;
+
+        // get list of warnings from parse
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("username", username);
+        ParseCloud.callFunctionInBackground("averageLengthBetweenDayOff",
+                params, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    try {
+                        disp.displayLength(Float.parseFloat(result));
+
+                    } catch (Exception exc) {
+                        Log.d("score", "failed to parse JSON violations");
+                    }
+                } else {
+                    Log.d("score", "failed, parse Error");
+                }
+            }
+        });
     }
 
     /**
