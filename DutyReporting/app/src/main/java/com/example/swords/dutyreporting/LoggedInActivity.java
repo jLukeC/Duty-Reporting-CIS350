@@ -151,8 +151,8 @@ public class LoggedInActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    //take to statistics view
-    public void onStatButtonClick(View view){
+    //take to shifts view
+    public void onShiftsButtonClick(View view){
         Intent intent = new Intent(this, StatisticsActivity.class);
         //pass username to StatisticsActivity
         intent.putExtra("USERNAME",username);
