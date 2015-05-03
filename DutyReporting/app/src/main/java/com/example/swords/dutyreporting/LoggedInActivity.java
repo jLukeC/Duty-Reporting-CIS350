@@ -17,6 +17,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -27,6 +30,8 @@ public class LoggedInActivity extends ActionBarActivity
     private boolean connectedToGoogleApi;
     private boolean isCheckedIn;
     private Handler handler;
+    private Calendar checkInTime;
+    private Calendar checkOutTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +83,17 @@ public class LoggedInActivity extends ActionBarActivity
 
     //record check in
     public void onCheckInButtonClick(View view) {
+        if (isCheckedIn) {
+            Toast toast = Toast.makeText(this.getApplicationContext(),
+                    "You are already checked in.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = "Unable to verify location.";
-        ;
+        CharSequence text = "You have been checked in, but unable to verify location.";
+
 
         if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -104,13 +115,21 @@ public class LoggedInActivity extends ActionBarActivity
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
         isCheckedIn = true;
+        checkInTime = Calendar.getInstance();
     }
 
     //record check out
     public void onCheckOutButtonClick(View view) {
+        if (!isCheckedIn) {
+            Toast toast = Toast.makeText(this.getApplicationContext(),
+                    "You haven't checked in yet.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        CharSequence text = "Unable to verify location.";
+        CharSequence text = "You have been checked out, but unable to verify location.";
 
         if (connectedToGoogleApi) {
             Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -132,6 +151,10 @@ public class LoggedInActivity extends ActionBarActivity
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
         isCheckedIn = false;
+
+        checkOutTime = Calendar.getInstance();
+        ParseHandler handler = new ParseHandler(username);
+        handler.setHoursWorked(checkInTime, checkOutTime);
     }
 
     //take to manual entry screen
@@ -243,12 +266,17 @@ public class LoggedInActivity extends ActionBarActivity
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                checkInTime = Calendar.getInstance();
             } else if (results[0] > 500 && isCheckedIn) {
                 text = "You have been checked out automatically!";
                 isCheckedIn = false;
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+
+                checkOutTime = Calendar.getInstance();
+                ParseHandler handler = new ParseHandler(username);
+                handler.setHoursWorked(checkInTime, checkOutTime);
             }
 
             handler.postDelayed(this, 1000 * 60 * 5);
