@@ -174,7 +174,6 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle connectionHint) {
         connectedToGoogleApi = true;
-
         handler.postDelayed(CheckLocation, 100);
     }
 
