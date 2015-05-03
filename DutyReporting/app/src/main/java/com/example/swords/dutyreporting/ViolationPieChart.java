@@ -1,30 +1,24 @@
 package com.example.swords.dutyreporting;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
-public class PDLogginInActivity extends ActionBarActivity {
-
-    private String username;
+public class ViolationPieChart extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdloggin_in);
-        Intent i = getIntent();
-        username = i.getStringExtra("USERNAME");
+        setContentView(R.layout.activity_violation_pie_chart);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_pdloggin_in, menu);
+        getMenuInflater().inflate(R.menu.menu_violation_pie_chart, menu);
         return true;
     }
 
@@ -41,22 +35,5 @@ public class PDLogginInActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onResidentListClicked(View view){
-        Intent intent = new Intent(this, UserSelectActivity.class);
-        //pass username to LoggedInActivity
-        intent.putExtra("PD_USERNAME", username);
-        startActivity(intent);
-    }
-
-    public void onAggregateDataClicked(View view){
-
-    }
-
-    public void onViolationClicked(View view){
-        Intent intent = new Intent(this, ChooseViolationStyle.class);
-        intent.putExtra("PD_USERNAME", username);
-        startActivity(intent);
     }
 }

@@ -73,6 +73,18 @@
             android:name=".ShiftsActivity"
             android:label="@string/title_activity_shifts" >
         </activity>
+        <activity
+            android:name=".ChooseViolationStyle"
+            android:label="@string/title_activity_choose_violation_style" >
+        </activity>
+        <activity
+            android:name=".ViolationPieChart"
+            android:label="@string/title_activity_violation_pie_chart" >
+        </activity>
+        <activity
+            android:name=".ViolationFrequencyChart"
+            android:label="@string/title_activity_violation_frequency_chart" >
+        </activity>
     </application>
 
 </manifest>

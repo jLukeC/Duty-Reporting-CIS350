@@ -29,5 +29,8 @@
     <string name="shifts">Shifts</string>
     <string name="title_activity_averages">AveragesActivity</string>
     <string name="title_activity_shifts">Logged Shifts</string>
+    <string name="title_activity_choose_violation_style">ChooseViolationStyle</string>
+    <string name="title_activity_violation_pie_chart">ViolationPieChart</string>
+    <string name="title_activity_violation_frequency_chart">ViolationFrequencyChart</string>
 
 </resources>
