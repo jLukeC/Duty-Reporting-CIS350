@@ -57,7 +57,7 @@ public class SpecificUserDataActivity extends ActionBarActivity {
             String[] hoursAndDate = w.split(" ");
             Matcher m = p.matcher(hoursAndDate[1]);
             double d = 0;
-            while(m.find()) {
+            if(m.find()) {
                 d = Double.parseDouble(m.group(1));
             }
             Integer hour = (int) d;

@@ -69,6 +69,10 @@
             android:name=".AveragesActivity"
             android:label="@string/title_activity_averages" >
         </activity>
+        <activity
+            android:name=".ShiftsActivity"
+            android:label="@string/title_activity_shifts" >
+        </activity>
     </application>
 
 </manifest>

@@ -28,5 +28,6 @@
     <string name="title_activity_in_and_out">InAndOutActivity</string>
     <string name="shifts">Shifts</string>
     <string name="title_activity_averages">AveragesActivity</string>
+    <string name="title_activity_shifts">Logged Shifts</string>
 
 </resources>

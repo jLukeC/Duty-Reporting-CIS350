@@ -1,6 +1,7 @@
 package com.example.swords.dutyreporting;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +58,7 @@ public class ParseHandler {
     public static Set<String> getSupervisors() {
         Set<String> supervisors = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
-        query.whereEqualTo("isSupervisor",true);
+        query.whereEqualTo("isSupervisor", true);
         try {
             List<ParseObject> pObjs = query.find();
             for (ParseObject p : pObjs) {
@@ -153,7 +155,7 @@ public class ParseHandler {
         ArrayList<String> hrsData = new ArrayList<String>();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
-        query.whereEqualTo("username", "testuser");
+        query.whereEqualTo("username", username);
 
         try {
             List<ParseObject> pObjs = query.find();
@@ -161,12 +163,12 @@ public class ParseHandler {
                 Date start = p.getDate("startTime");
 
                 double hours = p.getDouble("hours");
-                Date end = new Date((long) (start.getTime() + (hours * 1000 * 60 * 60)));
+/*                Date end = new Date((long) (start.getTime() + (hours * 1000 * 60 * 60)));
 
-                double hrs = getDateDiff(start,end, TimeUnit.HOURS);
+                double hrs = getDateDiff(start,end, TimeUnit.HOURS);*/
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                 String reportDate = df.format(start);
-                hrsData.add(reportDate + " " + Double.toString(hrs));
+                hrsData.add(reportDate + " " + Double.toString(hours));
             }
         }
         catch (ParseException e) {
@@ -211,7 +213,7 @@ public class ParseHandler {
                         Log.d("score", "failed to parse JSON violations");
                     }
                 } else {
-                    Log.d("score","failed, parse Error");
+                    Log.d("score", "failed, parse Error");
                 }
             }
         });
@@ -224,18 +226,45 @@ public class ParseHandler {
         Date end_date = end.getTime();
         try {
             ParseObject new_time = new ParseObject("HourEntry");
+
+            double hours = getDateDiff(start_date,end_date, TimeUnit.HOURS);
             new_time.put("startTime", start_date);
-
-            double hours = (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60);
-
-            new_time.put("hours", end_date.getTime() - hours);
+            new_time.put("hours", hours);
             new_time.put("endTime", end_date);
-            new_time.put("username", "testuser");
+            new_time.put("username", username);
             new_time.saveInBackground();
             return  true;
         }
         catch(Exception e){
             Log.d("adding hours","could not add hour entry");
+            return false;
+        }
+    }
+
+    //delete given shift from parse database
+    public boolean deleteShift(String startDate, Double shiftLength) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
+        query.whereEqualTo("username", username);
+        try {
+            List<ParseObject> pObjs = query.find();
+            int i = 0;
+            for (ParseObject p : pObjs) {
+                Date start = p.getDate("startTime");
+                double hours = p.getDouble("hours");
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                String reportDate = df.format(start);
+                if (startDate.equals(reportDate)){
+                    double diff = Math.abs(hours - shiftLength);
+                    if (diff < 0.01){
+                        p.deleteInBackground();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        catch(Exception e){
+            Log.d("deleting shifts","could not delete entry");
             return false;
         }
     }

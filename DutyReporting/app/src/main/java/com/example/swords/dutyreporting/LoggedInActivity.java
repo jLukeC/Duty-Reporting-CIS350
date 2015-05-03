@@ -143,13 +143,13 @@ public class LoggedInActivity extends ActionBarActivity
 
     //take to shifts view
     public void onShiftsButtonClick(View view) {
-        Intent intent = new Intent(this, StatisticsActivity.class);
-        //pass username to StatisticsActivity
+        Intent intent = new Intent(this, ShiftsActivity.class);
+        //pass username to ShiftsActivity
         intent.putExtra("USERNAME", username);
         startActivity(intent);
     }
 
-    //take to shifts view
+    //take to graphs view
     public void onGraphsButtonClick(View view) {
         Intent intent = new Intent(this,SpecificUserDataActivity.class);
         //pass username to StatisticsActivity

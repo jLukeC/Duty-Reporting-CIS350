@@ -34,7 +34,7 @@
         android:onClick="onCheckOutButtonClick"/>
 
     <Button
-        android:layout_width="300px"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/shifts"
         android:textColor="#FFFFFF"
@@ -48,7 +48,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:layout_width="300px"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/manual_entry"
         android:textColor="#FFFFFF"
@@ -58,10 +58,12 @@
         android:layout_marginBottom="20dp"
         android:layout_above="@+id/shifts_button"
         android:layout_alignLeft="@+id/check_out_button"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        />
 
     <Button
-        android:layout_width="300px"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="STATS"
         android:textColor="#FFFFFF"
@@ -69,10 +71,12 @@
         android:id="@+id/averages_button"
         android:onClick="onStatsButtonClick"
         android:layout_alignTop="@+id/Forgot_button"
-        android:layout_alignStart="@+id/shifts_button" />
+        android:layout_alignStart="@+id/shifts_button"
+        android:layout_alignLeft="@+id/shifts_button"
+        />
 
     <Button
-        android:layout_width="300px"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="User Graphs"
         android:textColor="#FFFFFF"
