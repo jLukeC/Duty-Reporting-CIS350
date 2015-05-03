@@ -221,6 +221,8 @@ public class LoggedInActivity extends ActionBarActivity
         }
     }
 
+    // Defines a callback to check location periodically to see if the user has entered or
+    // left the hopsital
     private Runnable CheckLocation = new Runnable() {
         @Override
         public void run() {

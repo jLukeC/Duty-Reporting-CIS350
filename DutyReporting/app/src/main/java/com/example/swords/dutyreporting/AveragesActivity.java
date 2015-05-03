@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 public class AveragesActivity extends ActionBarActivity implements AveragesDisplay {
 
+    /**
+     * Handles appending the average shift length
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,10 @@ public class AveragesActivity extends ActionBarActivity implements AveragesDispl
         handler.averageLengthBetweenDayOff(this);
     }
 
+    /**
+     * Allows parse handler to call with the average day off range
+     * @param length
+     */
     public void displayLength (Float length) {
         TextView dayOffLength = (TextView)findViewById(R.id.days_off);
         dayOffLength.append("Your average time between days off is: " + length);

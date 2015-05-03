@@ -117,6 +117,10 @@ public class ParseHandler {
         return hrsData;
     }
 
+    /**
+     * Calculates the average shift length from all shifts in the past month
+     * @return
+     */
     public Double getAverageShiftLength() {
         ArrayList<String> hrsData = new ArrayList<String>();
 
@@ -176,6 +180,12 @@ public class ParseHandler {
         return hrsData;
     }
 
+    /**
+     * Tells the parse handler to fetch the warnings from cloud code, method is void because
+     * when the info is retrieved it is passed back to the caller using an interface
+     * @param disp
+     * @param resident
+     */
     public void getWarnings(final WarningDisplay disp, final String resident) {
         final Set<String> warnings = new TreeSet<String>();
 
@@ -240,6 +250,10 @@ public class ParseHandler {
         }
     }
 
+    /**
+     * Calculates the average length between days off using parse callback
+     * @param disp
+     */
     public void averageLengthBetweenDayOff (final AveragesDisplay disp) {
         final Double length = null;
 
