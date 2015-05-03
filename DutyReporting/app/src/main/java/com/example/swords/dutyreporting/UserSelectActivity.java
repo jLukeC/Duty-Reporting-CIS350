@@ -38,8 +38,11 @@ public class UserSelectActivity extends ActionBarActivity {
                     return;
                 } else {
                     String res = parent.getItemAtPosition(pos).toString();
-                    Intent intent = new Intent(UserSelectActivity.this, InAndOutActivity.class);
-                    intent.putExtra("resident", res);
+//                    Intent intent = new Intent(UserSelectActivity.this, InAndOutActivity.class);
+//                    intent.putExtra("resident", res);
+//                    startActivity(intent);
+                    Intent intent = new Intent(UserSelectActivity.this, ShiftsActivity.class);
+                    intent.putExtra("USERNAME",res);
                     startActivity(intent);
                 }
             }
