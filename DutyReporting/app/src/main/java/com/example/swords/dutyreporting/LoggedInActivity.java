@@ -261,7 +261,9 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGoogleApiClient.disconnect();
-        handler.removeCallbacks(CheckLocation);
+        if(mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+            handler.removeCallbacks(CheckLocation);
+        }
     }
 }
