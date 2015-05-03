@@ -46,10 +46,6 @@
             android:label="@string/title_activity_aggregate_data" >
         </activity>
         <activity
-            android:name=".ListOfResidentsActivity"
-            android:label="@string/title_activity_list_of_residents" >
-        </activity>
-        <activity
             android:name=".SpecificUserDataActivity"
             android:label="@string/title_activity_specific_user_data" >
         </activity>
@@ -68,6 +64,22 @@
         <activity
             android:name=".AveragesActivity"
             android:label="@string/title_activity_averages" >
+        </activity>
+        <activity
+            android:name=".ShiftsActivity"
+            android:label="@string/title_activity_shifts" >
+        </activity>
+        <activity
+            android:name=".ChooseViolationStyle"
+            android:label="@string/title_activity_choose_violation_style" >
+        </activity>
+        <activity
+            android:name=".ViolationPieChart"
+            android:label="@string/title_activity_violation_pie_chart" >
+        </activity>
+        <activity
+            android:name=".ViolationFrequencyChart"
+            android:label="@string/title_activity_violation_frequency_chart" >
         </activity>
     </application>
 

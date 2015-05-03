@@ -8,23 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class ListOfResidentsActivity extends ActionBarActivity {
-    String pd_user;
+public class ChooseViolationStyle extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_of_residents);
-        Intent i = getIntent();
-        pd_user = i.getStringExtra("PD_USERNAME");
-
+        setContentView(R.layout.activity_choose_violation_style);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list_of_residents, menu);
+        getMenuInflater().inflate(R.menu.menu_choose_violation_style, menu);
         return true;
     }
 
@@ -43,17 +39,18 @@ public class ListOfResidentsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onUserGraphButtonClicked(View view){
-        Intent intent = new Intent(this, SpecificUserDataActivity.class);
-        //pass username to LoggedInActivity
-        intent.putExtra("USERNAME", "testuser");
+    public void onListClicked(View view){
+        Intent intent = new Intent(this, AllViolationsActivity.class);
         startActivity(intent);
     }
 
-    public void onUserStatButtonClicked(View view){
-        Intent intent = new Intent(this, StatisticsActivity.class);
-        //pass username to LoggedInActivity
-        intent.putExtra("USERNAME", "testuser");
+    public void onFrequencyClicked(View view){
+        Intent intent = new Intent(this, ViolationFrequencyChart.class);
+        startActivity(intent);
+    }
+
+    public void onPieClicked(View view){
+        Intent intent = new Intent(this, ViolationPieChart.class);
         startActivity(intent);
     }
 }

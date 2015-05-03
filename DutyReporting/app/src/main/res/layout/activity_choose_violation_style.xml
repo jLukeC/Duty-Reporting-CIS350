@@ -4,48 +4,43 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.swords.dutyreporting.PDLogginInActivity"
+    tools:context="com.example.swords.dutyreporting.ChooseViolationStyle"
     android:background="#FFFFFF">
 
     <Button
-        android:layout_width="180dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="List of Residents"
-        android:onClick="onResidentListClicked"
+        android:text="List of Violations"
+        android:onClick="onListClicked"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
         android:id="@+id/button"
         android:layout_marginTop="91dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:textStyle="bold"
-        android:textSize="16dp" />
+        android:layout_alignStart="@+id/button2" />
 
     <Button
-        android:layout_width="180dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Aggregate Resident Data"
-        android:onClick="onAggregateDataClicked"
+        android:text="Violation Frequency Chart"
+        android:onClick="onFrequencyClicked"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
         android:id="@+id/button2"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:textSize="16dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="180dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:onClick="onViolationClicked"
-        android:text="Violations"
+        android:onClick="onPieClicked"
+        android:text="Violation Pie Chart"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
         android:id="@+id/button3"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="107dp"
-        android:textStyle="bold"
-        android:textSize="16dp" />
+        android:layout_marginBottom="107dp" />
+
 </RelativeLayout>
