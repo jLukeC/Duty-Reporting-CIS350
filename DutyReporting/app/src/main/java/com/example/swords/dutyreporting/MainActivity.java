@@ -52,11 +52,6 @@ public class MainActivity extends ActionBarActivity {
                             CharSequence text = "Incorrect username/password combination";
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
-                            if (et_username.getText().toString().equals("user") && et_password.getText().toString().equals("pass")) {
-                                log_in();
-                            } else if (et_username.getText().toString().equals("pduser") && et_password.getText().toString().equals("pass")) {
-                                pd_log_in();
-                            }
                         }
                     }
                 });
