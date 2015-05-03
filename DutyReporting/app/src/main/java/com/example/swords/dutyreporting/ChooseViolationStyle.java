@@ -8,23 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class PDLogginInActivity extends ActionBarActivity {
-
-    private String username;
+public class ChooseViolationStyle extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdloggin_in);
-        Intent i = getIntent();
-        username = i.getStringExtra("USERNAME");
+        setContentView(R.layout.activity_choose_violation_style);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_pdloggin_in, menu);
+        getMenuInflater().inflate(R.menu.menu_choose_violation_style, menu);
         return true;
     }
 
@@ -43,22 +39,18 @@ public class PDLogginInActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onResidentListClicked(View view){
-        Intent intent = new Intent(this, UserSelectActivity.class);
-        //pass username to LoggedInActivity
-        intent.putExtra("PD_USERNAME", username);
+    public void onListClicked(View view){
+        Intent intent = new Intent(this, AllViolationsActivity.class);
         startActivity(intent);
     }
 
-    public void onAggregateDataClicked(View view){
-        Intent intent = new Intent(this, AggregateDataActivity.class);
-        intent.putExtra("PD_USERNAME", username);
+    public void onFrequencyClicked(View view){
+        Intent intent = new Intent(this, ViolationFrequencyChart.class);
         startActivity(intent);
     }
 
-    public void onViolationClicked(View view){
-        Intent intent = new Intent(this, ChooseViolationStyle.class);
-        intent.putExtra("PD_USERNAME", username);
+    public void onPieClicked(View view){
+        Intent intent = new Intent(this, ViolationPieChart.class);
         startActivity(intent);
     }
 }

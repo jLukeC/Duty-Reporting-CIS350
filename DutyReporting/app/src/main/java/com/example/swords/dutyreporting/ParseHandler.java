@@ -42,7 +42,7 @@ public class ParseHandler {
     public static Set<String> getPassword() {
         Set<String> passwords = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
-        query.whereEqualTo("username", username);
+        query.whereEqualTo("name", username);
         try {
             List<ParseObject> pObj = query.find();
             for (ParseObject p : pObj) {
