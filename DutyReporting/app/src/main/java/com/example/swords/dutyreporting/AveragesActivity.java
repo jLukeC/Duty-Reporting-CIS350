@@ -7,9 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 
 public class AveragesActivity extends ActionBarActivity implements AveragesDisplay {
 
+    /**
+     * Handles appending the average shift length
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,17 +24,20 @@ public class AveragesActivity extends ActionBarActivity implements AveragesDispl
 
         String username = intent.getStringExtra("USERNAME");
         TextView header = (TextView)findViewById(R.id.user_welcome);
-        header.setText("Averages for " + username + " in the past month:");
         ParseHandler handler = new ParseHandler(username);
 
         Double averageHrs = handler.getAverageShiftLength();
+        String averageStr = new DecimalFormat("#.##").format(averageHrs);
 
         TextView shiftLength = (TextView)findViewById(R.id.average_shift);
-        shiftLength.append("Your average shift length is: " + averageHrs);
+        shiftLength.setText("");
+        shiftLength.append(averageStr + " hours");
 
         String hrRec;
         if (averageHrs > 12) {
             hrRec = "Consider taking shorter shifts if possible!";
+        } else if (averageHrs < 6) {
+            hrRec = "Your average shift lengths should be a bit longer.";
         } else {
             hrRec = "Your average shift lengths are within what is recommended!";
         }
@@ -38,9 +47,15 @@ public class AveragesActivity extends ActionBarActivity implements AveragesDispl
         handler.averageLengthBetweenDayOff(this);
     }
 
+    /**
+     * Allows parse handler to call with the average day off range
+     * @param length
+     */
     public void displayLength (Float length) {
         TextView dayOffLength = (TextView)findViewById(R.id.days_off);
-        dayOffLength.append("Your average time between days off is: " + length);
+        dayOffLength.setText("");
+        String averageStr = new DecimalFormat("#.##").format(length);
+        dayOffLength.append(averageStr + " days");
 
         String offRec;
         if (length > 7) {

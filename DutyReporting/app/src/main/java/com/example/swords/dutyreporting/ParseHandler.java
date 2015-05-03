@@ -45,7 +45,7 @@ public class ParseHandler {
 
     //get password associated with username
     public static Set<String> getPassword() {
-        Set<String> passwords = new HashSet<>();
+        Set<String> passwords = new HashSet<String>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
         query.whereEqualTo("name", username);
         try {
@@ -61,7 +61,7 @@ public class ParseHandler {
 
     /* returns a list of all supervisors */
     public static Set<String> getSupervisors() {
-        Set<String> supervisors = new HashSet<>();
+        Set<String> supervisors = new HashSet<String>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
         query.whereEqualTo("isSupervisor", true);
         try {
@@ -78,7 +78,7 @@ public class ParseHandler {
 
     /* returns a list of all residents */
     public static Set<String> getResidents() {
-        Set<String> residents = new HashSet<>();
+        Set<String> residents = new HashSet<String>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("UserType");
         query.whereEqualTo("isSupervisor", false);
         try {
@@ -124,6 +124,10 @@ public class ParseHandler {
         return hrsData;
     }
 
+    /**
+     * Calculates the average shift length from all shifts in the past month
+     * @return
+     */
     public Double getAverageShiftLength() {
         ArrayList<String> hrsData = new ArrayList<String>();
 
@@ -183,6 +187,12 @@ public class ParseHandler {
         return hrsData;
     }
 
+    /**
+     * Tells the parse handler to fetch the warnings from cloud code, method is void because
+     * when the info is retrieved it is passed back to the caller using an interface
+     * @param disp
+     * @param resident
+     */
     public void getWarnings(final WarningDisplay disp, final String resident) {
         final Set<String> warnings = new TreeSet<String>();
         violationCount = new int[4];
@@ -254,6 +264,7 @@ public class ParseHandler {
         }
     }
 
+
     //delete given shift from parse database
     public boolean deleteShift(String startDate, Double shiftLength) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
@@ -282,6 +293,10 @@ public class ParseHandler {
         }
     }
 
+    /**
+     * Calculates the average length between days off using parse callback
+     * @param disp
+     */
     public void averageLengthBetweenDayOff (final AveragesDisplay disp) {
         final Double length = null;
 
