@@ -43,9 +43,25 @@ public class MainActivity extends ActionBarActivity {
                         String password = et_password.getText().toString();
                         ParseHandler handler = new ParseHandler(username);
                         if (ParseHandler.getSupervisors().contains(username)) {
-                            pd_log_in();
+                            if (handler.getPassword().contains(password)) {
+                                pd_log_in();
+                            } else {
+                                Context context = getApplicationContext();
+                                int duration = Toast.LENGTH_SHORT;
+                                CharSequence text = "Incorrect username/password combination";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         } else if (ParseHandler.getResidents().contains(username)) {
-                            log_in();
+                            if (handler.getPassword().contains(password)) {
+                                log_in();
+                            } else {
+                                Context context = getApplicationContext();
+                                int duration = Toast.LENGTH_SHORT;
+                                CharSequence text = "Incorrect username/password combination";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         } else {
                             Context context = getApplicationContext();
                             int duration = Toast.LENGTH_SHORT;
