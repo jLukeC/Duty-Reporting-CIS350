@@ -2,10 +2,8 @@ package com.example.swords.dutyreporting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.Parse;
-import com.parse.ParseObject;
-
-import java.security.MessageDigest;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,11 +29,6 @@ public class MainActivity extends ActionBarActivity {
         //initialize Parse
         Parse.initialize(this, "2DR7xvqsx4YcYsgiZ7HGfy5XBLF1fWudmD21ykku", "75gq1Es8M4imxD1SQHVWG1e1CqvNSlTYtNxRbk0T");
 
-        //test whether device is connected to Parse
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.put("objectId", "12345");
-        testObject.saveInBackground();
 
         //initialize button and text fields
         b_log_in = (Button)findViewById(R.id.log_in_button);
@@ -53,20 +43,31 @@ public class MainActivity extends ActionBarActivity {
                         String password = et_password.getText().toString();
                         ParseHandler handler = new ParseHandler(username);
                         if (ParseHandler.getSupervisors().contains(username)) {
-                            pd_log_in();
+                            if (handler.getPassword().contains(password)) {
+                                pd_log_in();
+                            } else {
+                                Context context = getApplicationContext();
+                                int duration = Toast.LENGTH_SHORT;
+                                CharSequence text = "Incorrect username/password combination";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         } else if (ParseHandler.getResidents().contains(username)) {
-                            log_in();
+                            if (handler.getPassword().contains(password)) {
+                                log_in();
+                            } else {
+                                Context context = getApplicationContext();
+                                int duration = Toast.LENGTH_SHORT;
+                                CharSequence text = "Incorrect username/password combination";
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         } else {
                             Context context = getApplicationContext();
                             int duration = Toast.LENGTH_SHORT;
                             CharSequence text = "Incorrect username/password combination";
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
-                            if (et_username.getText().toString().equals("user") && et_password.getText().toString().equals("pass")) {
-                                log_in();
-                            } else if (et_username.getText().toString().equals("pduser") && et_password.getText().toString().equals("pass")) {
-                                pd_log_in();
-                            }
                         }
                     }
                 });

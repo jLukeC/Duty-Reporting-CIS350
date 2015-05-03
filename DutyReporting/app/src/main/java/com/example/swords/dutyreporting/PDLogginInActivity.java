@@ -51,11 +51,13 @@ public class PDLogginInActivity extends ActionBarActivity {
     }
 
     public void onAggregateDataClicked(View view){
-
+        Intent intent = new Intent(this, AggregateDataActivity.class);
+        intent.putExtra("PD_USERNAME", username);
+        startActivity(intent);
     }
 
     public void onViolationClicked(View view){
-        Intent intent = new Intent(this, AllViolationsActivity.class);
+        Intent intent = new Intent(this, ChooseViolationStyle.class);
         intent.putExtra("PD_USERNAME", username);
         startActivity(intent);
     }

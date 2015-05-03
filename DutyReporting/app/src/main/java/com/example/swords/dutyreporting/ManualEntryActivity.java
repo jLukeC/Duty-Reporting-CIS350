@@ -111,6 +111,7 @@ public class ManualEntryActivity extends ActionBarActivity {
         String pretty = hourString + ":" + minString + ampm;
         return pretty;
     }
+
     private static void updateEndText(){
         checkForNextDay();
         int month_selected = end.get(Calendar.MONTH) + 1;

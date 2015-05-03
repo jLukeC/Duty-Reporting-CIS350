@@ -1,13 +1,8 @@
 package com.example.swords.dutyreporting;
 
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
-import android.net.wifi.WifiConfiguration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -19,15 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class LoggedInActivity extends ActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -149,13 +137,21 @@ public class LoggedInActivity extends ActionBarActivity
     //take to manual entry screen
     public void onManualEntryButtonClick(View view) {
         Intent intent = new Intent(this, ManualEntryActivity.class);
-        intent.putExtra("USERMAME", username);
+        intent.putExtra("USERNAME", username);
         startActivity(intent);
     }
 
     //take to shifts view
     public void onShiftsButtonClick(View view) {
-        Intent intent = new Intent(this, StatisticsActivity.class);
+        Intent intent = new Intent(this, ShiftsActivity.class);
+        //pass username to ShiftsActivity
+        intent.putExtra("USERNAME", username);
+        startActivity(intent);
+    }
+
+    //take to graphs view
+    public void onGraphsButtonClick(View view) {
+        Intent intent = new Intent(this,SpecificUserDataActivity.class);
         //pass username to StatisticsActivity
         intent.putExtra("USERNAME", username);
         startActivity(intent);
@@ -178,7 +174,6 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle connectionHint) {
         connectedToGoogleApi = true;
-
         handler.postDelayed(CheckLocation, 100);
     }
 
@@ -221,6 +216,8 @@ public class LoggedInActivity extends ActionBarActivity
         }
     }
 
+    // Defines a callback to check location periodically to see if the user has entered or
+    // left the hopsital
     private Runnable CheckLocation = new Runnable() {
         @Override
         public void run() {
@@ -265,7 +262,9 @@ public class LoggedInActivity extends ActionBarActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGoogleApiClient.disconnect();
-        handler.removeCallbacks(CheckLocation);
+        if(mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+            handler.removeCallbacks(CheckLocation);
+        }
     }
 }

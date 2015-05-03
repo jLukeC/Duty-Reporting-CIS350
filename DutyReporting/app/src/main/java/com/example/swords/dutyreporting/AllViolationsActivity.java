@@ -12,6 +12,7 @@ import java.util.Set;
 
 public class AllViolationsActivity extends ActionBarActivity implements WarningDisplay {
 
+    //method called when activity is initialized
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public class AllViolationsActivity extends ActionBarActivity implements WarningD
 
     }
 
+    //add warnings to a resident
     public void addWarnings (Set<String> warnings, String resident) {
         TextView residentsListView = (TextView)findViewById(R.id.residents_list);
         residentsListView.append("--------");
@@ -39,7 +41,6 @@ public class AllViolationsActivity extends ActionBarActivity implements WarningD
             residentsListView.append(s + '\n');
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
