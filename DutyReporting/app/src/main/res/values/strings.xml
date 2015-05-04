@@ -32,5 +32,7 @@
     <string name="title_activity_choose_violation_style">ChooseViolationStyle</string>
     <string name="title_activity_violation_pie_chart">ViolationPieChart</string>
     <string name="title_activity_violation_frequency_chart">ViolationFrequencyChart</string>
+    <string name = "user_select_description">You can view your residents\' data as either
+        a list or a graph, just choose the coresponding dropdown</string>
 
 </resources>
