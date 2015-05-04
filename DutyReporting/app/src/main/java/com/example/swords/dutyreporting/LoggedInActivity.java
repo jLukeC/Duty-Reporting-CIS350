@@ -25,7 +25,6 @@ public class LoggedInActivity extends ActionBarActivity
 
     private String username;
     static private GoogleApiClient mGoogleApiClient;
-    private boolean succesfulConnection;
     private static final String TAG = "LoggedInActivity";
     private boolean connectedToGoogleApi;
     private boolean isCheckedIn;
