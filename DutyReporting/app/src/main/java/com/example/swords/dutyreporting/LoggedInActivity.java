@@ -110,9 +110,40 @@ public class LoggedInActivity extends ActionBarActivity
                 }
             }
             // Start a thread to check if the user has left the hospital
-            LocationCheckThread t = new LocationCheckThread(mGoogleApiClient,
-                                    getApplicationContext());
-            t.start();
+            Handler h = new Handler(context.getMainLooper());
+
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(20000);
+                    }
+                    catch (InterruptedException e) {
+
+                    }
+                    finally {
+                        synchronized (mGoogleApiClient) {
+                            Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
+                                    mGoogleApiClient);
+
+                            if (lastKnownLocation != null) {
+
+                                float[] results = new float[1];
+                                Location.distanceBetween(lastKnownLocation.getLatitude(),
+                                        lastKnownLocation.getLongitude(),
+                                        39.95013175, -75.1937449, results);
+
+                                if (results[0] < 500) {
+                                    Toast toast = Toast.makeText(getApplicationContext(), "Note it seems that you still" +
+                                            " haven't left the hospital after checking out", Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
         }
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
@@ -289,6 +320,9 @@ public class LoggedInActivity extends ActionBarActivity
     };
 
 
+
+
+
     /**
      * Called when activity is ending, disconnects from google play services
      */
@@ -298,45 +332,6 @@ public class LoggedInActivity extends ActionBarActivity
         if(mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
             handler.removeCallbacks(CheckLocation);
-        }
-    }
-}
-
-
-// Thread class that checks for location
-class LocationCheckThread extends Thread {
-    private GoogleApiClient mGoogleApiClient;
-    Context context;
-    public LocationCheckThread (GoogleApiClient mGoogleApiClient, Context context) {
-        this.mGoogleApiClient = mGoogleApiClient;
-        this.context = context;
-    }
-    public void run() {
-        try {
-            Thread.sleep(600000);
-        }
-        catch (InterruptedException e) {
-
-        }
-        finally {
-            synchronized (mGoogleApiClient) {
-                Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-
-                if (lastKnownLocation != null) {
-
-                    float[] results = new float[1];
-                    Location.distanceBetween(lastKnownLocation.getLatitude(),
-                            lastKnownLocation.getLongitude(),
-                            39.95013175, -75.1937449, results);
-
-                    if (results[0] < 500) {
-                        Toast toast = Toast.makeText(context, "Note it seems that you still" +
-                                "haven't left the hospital after checking out", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                }
-            }
         }
     }
 }
