@@ -120,6 +120,7 @@ public class LoggedInActivity extends ActionBarActivity
 
     //record check out
     public void onCheckOutButtonClick(View view) {
+        boolean inLocation = false;
         if (!isCheckedIn) {
             Toast toast = Toast.makeText(this.getApplicationContext(),
                     "You haven't checked in yet.", Toast.LENGTH_SHORT);
@@ -142,8 +143,10 @@ public class LoggedInActivity extends ActionBarActivity
                         39.95013175, -75.1937449, results);
 
                 if (results[0] < 500) {
+                    inLocation = true;
                     text = " Your location has been verified, thank you for checking out!";
                 } else {
+                    inLocation = false;
                     text = "Your location does not appear to be near the hospital...";
                 }
             }
@@ -154,7 +157,7 @@ public class LoggedInActivity extends ActionBarActivity
 
         checkOutTime = Calendar.getInstance();
         ParseHandler handler = new ParseHandler(username);
-        handler.setHoursWorked(checkInTime, checkOutTime);
+        handler.setHoursWorked(checkInTime, checkOutTime, inLocation);
     }
 
     //take to manual entry screen
@@ -276,7 +279,7 @@ public class LoggedInActivity extends ActionBarActivity
 
                 checkOutTime = Calendar.getInstance();
                 ParseHandler handler = new ParseHandler(username);
-                handler.setHoursWorked(checkInTime, checkOutTime);
+                handler.setHoursWorked(checkInTime, checkOutTime, true);
             }
 
             handler.postDelayed(this, 1000 * 60 * 5);

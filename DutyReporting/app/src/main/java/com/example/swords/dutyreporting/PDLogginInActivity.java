@@ -50,6 +50,13 @@ public class PDLogginInActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void onLocationClicked(View view){
+        Intent intent = new Intent(this, LocationData.class);
+        //pass username to LoggedInActivity
+        intent.putExtra("PD_USERNAME", username);
+        startActivity(intent);
+    }
+
     public void onAggregateDataClicked(View view){
         Intent intent = new Intent(this, AggregateDataActivity.class);
         intent.putExtra("PD_USERNAME", username);
