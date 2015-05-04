@@ -51,6 +51,40 @@ public class UserSelectActivity extends ActionBarActivity {
         });
 
 
+        // Graph Spinner
+
+        Spinner spinnerGraph = (Spinner)findViewById(R.id.spinner_graph);
+        ArrayAdapter<String> spinnerGraphAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerGraphAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGraph.setAdapter(spinnerAdapter);
+        spinnerGraphAdapter.add("Select a Resident --");
+        for (String resident : ParseHandler.getResidents()) {
+            spinnerGraphAdapter.add(resident);
+        }
+        spinnerGraphAdapter.notifyDataSetChanged();
+
+        spinnerGraph.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                if (parent.getItemAtPosition(pos).toString().equals("Select a Resident")) {
+                    return;
+                } else {
+                    String res = parent.getItemAtPosition(pos).toString();
+                    Intent intent = new Intent(UserSelectActivity.this, SpecificUserDataActivity.class);
+                    intent.putExtra("USERNAME", res);
+                    startActivity(intent);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+
+        });
+
+
 
     }
 

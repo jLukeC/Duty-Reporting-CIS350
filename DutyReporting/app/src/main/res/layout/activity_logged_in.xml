@@ -78,7 +78,7 @@
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="User Graphs"
+        android:text="Graphs"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
         android:id="@+id/graphs_button"

@@ -39,10 +39,6 @@ public class ParseHandler {
         username = u;
     }
 
-    public int[] getViolationCount() {
-        return violationCount;
-    }
-
     //get password associated with username
     public static Set<String> getPassword() {
         Set<String> passwords = new HashSet<String>();
@@ -57,6 +53,32 @@ public class ParseHandler {
             Log.d("score","failed, parse Error");
         }
         return passwords;
+    }
+
+    public static int[] getInLocation() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
+
+        int ct_true = 0;
+        int ct_false = 0;
+
+        try {
+            List<ParseObject> pObjs = query.find();
+            for (ParseObject p : pObjs) {
+                boolean inLocation = p.getBoolean("inLocation");
+                if (inLocation) {
+                    ct_true++;
+                } else {
+                    ct_false++;
+                }
+            }
+        }
+        catch (ParseException e) {
+            Log.d("score","failed, parse Error");
+        }
+        int[] toReturn = new int[2];
+        toReturn[0] = ct_true;
+        toReturn[1] = ct_false;
+        return toReturn;
     }
 
     /* returns a list of all supervisors */
@@ -243,7 +265,7 @@ public class ParseHandler {
 
     }
 
-    public boolean setHoursWorked(Calendar start, Calendar end) {
+    public boolean setHoursWorked(Calendar start, Calendar end, boolean inLocation) {
         //add hours to parse database for given date
         Date start_date = start.getTime();
         Date end_date = end.getTime();
@@ -255,6 +277,7 @@ public class ParseHandler {
             new_time.put("hours", hours);
             new_time.put("endTime", end_date);
             new_time.put("username", username);
+            new_time.put("inLocation", inLocation);
             new_time.saveInBackground();
             return  true;
         }

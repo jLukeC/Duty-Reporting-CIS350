@@ -81,6 +81,10 @@
             android:name=".ViolationFrequencyChart"
             android:label="@string/title_activity_violation_frequency_chart" >
         </activity>
+        <activity
+            android:name=".LocationData"
+            android:label="@string/title_activity_location_data" >
+        </activity>
     </application>
 
 </manifest>

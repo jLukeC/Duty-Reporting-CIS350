@@ -65,7 +65,7 @@ public class ManualEntryActivity extends ActionBarActivity {
         }
         else {
             ParseHandler parseHandler = new ParseHandler(username);
-            boolean saved = parseHandler.setHoursWorked(start, end);
+            boolean saved = parseHandler.setHoursWorked(start, end, false);
             if (saved) {
                 Toast.makeText(getApplicationContext(), "Your hours were successfully saved!", Toast.LENGTH_SHORT).show();
             } else {
