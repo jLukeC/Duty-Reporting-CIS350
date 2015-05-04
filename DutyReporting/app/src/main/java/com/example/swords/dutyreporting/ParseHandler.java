@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class ParseHandler {
     private static String username;
     public Set<String> warnings;
+    public int[] violationCount;
 
     public ParseHandler(String u) {
         // get parse information for that username
@@ -52,6 +53,32 @@ public class ParseHandler {
             Log.d("score","failed, parse Error");
         }
         return passwords;
+    }
+
+    public static int[] getInLocation() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("HourEntry");
+
+        int ct_true = 0;
+        int ct_false = 0;
+
+        try {
+            List<ParseObject> pObjs = query.find();
+            for (ParseObject p : pObjs) {
+                boolean inLocation = p.getBoolean("inLocation");
+                if (inLocation) {
+                    ct_true++;
+                } else {
+                    ct_false++;
+                }
+            }
+        }
+        catch (ParseException e) {
+            Log.d("score","failed, parse Error");
+        }
+        int[] toReturn = new int[2];
+        toReturn[0] = ct_true;
+        toReturn[1] = ct_false;
+        return toReturn;
     }
 
     /* returns a list of all supervisors */
@@ -190,6 +217,10 @@ public class ParseHandler {
      */
     public void getWarnings(final WarningDisplay disp, final String resident) {
         final Set<String> warnings = new TreeSet<String>();
+        violationCount = new int[4];
+        for (int i = 0; i < violationCount.length; i++) {
+            violationCount[i] = 0;
+        }
 
         // get list of warnings from parse
         HashMap<String, Object> params = new HashMap<String, Object>();
@@ -206,15 +237,19 @@ public class ParseHandler {
 
                         if (monthViolation) {
                             warnings.add("Worked more than an average of 80 hours a week in the past month");
+                            violationCount[0]++;
                         }
                         for (int i = 0; i < weekViolations.length(); i++) {
                             warnings.add("Too many days worked in a row starting at " + weekViolations.getString(i));
+                            violationCount[1]++;
                         }
                         for (int i = 0; i < restViolations.length(); i++) {
                             warnings.add("Did not get 8hr break before shift at " + restViolations.getString(i));
+                            violationCount[2]++;
                         }
                         for (int i = 0; i < shiftViolations.length(); i++) {
                             warnings.add("Worked more than 24+4 hrs at " + shiftViolations.getString(i));
+                            violationCount[3]++;
                         }
 
                         disp.addWarnings(warnings, resident);
@@ -230,7 +265,7 @@ public class ParseHandler {
 
     }
 
-    public boolean setHoursWorked(Calendar start, Calendar end) {
+    public boolean setHoursWorked(Calendar start, Calendar end, boolean inLocation) {
         //add hours to parse database for given date
         Date start_date = start.getTime();
         Date end_date = end.getTime();
@@ -242,6 +277,7 @@ public class ParseHandler {
             new_time.put("hours", hours);
             new_time.put("endTime", end_date);
             new_time.put("username", username);
+            new_time.put("inLocation", inLocation);
             new_time.saveInBackground();
             return  true;
         }
