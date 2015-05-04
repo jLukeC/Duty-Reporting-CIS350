@@ -29,11 +29,11 @@
     <string name="shifts">Shifts</string>
     <string name="title_activity_averages">Shift Statistics </string>
     <string name="title_activity_shifts">Logged Shifts</string>
-    <string name="title_activity_choose_violation_style">ChooseViolationStyle</string>
-    <string name="title_activity_violation_pie_chart">ViolationPieChart</string>
-    <string name="title_activity_violation_frequency_chart">ViolationFrequencyChart</string>
+    <string name="title_activity_choose_violation_style">Choose Violation Information</string>
+    <string name="title_activity_violation_pie_chart">Violation Pie Chart</string>
+    <string name="title_activity_violation_frequency_chart">Violation Frequency Table</string>
     <string name = "user_select_description">You can view your residents\' data as either
         a list or a graph, just choose the coresponding dropdown</string>
-    <string name="title_activity_location_data">LocationData</string>
+    <string name="title_activity_location_data">Sign in Locations Bar Graph</string>
 
 </resources>

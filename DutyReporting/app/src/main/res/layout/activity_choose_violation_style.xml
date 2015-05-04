@@ -23,7 +23,7 @@
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:text="Violation Frequency Chart"
+        android:text="Violation Frequency Table"
         android:onClick="onFrequencyClicked"
         android:textColor="#FFFFFF"
         android:background="#FF0000"
